@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Search />
+    <Header />
   </div>
 </template>
 <script>
-import Search from "./components/HomeSearch";
+import Header from "./components/TheHeader";
 
 export default {
   components: {
-    Search
+    Header
   }
 };
 </script>
