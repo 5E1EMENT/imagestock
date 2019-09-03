@@ -1,14 +1,16 @@
 <template>
   <div>
-    <Search />
+    <Header />
+    <Photos />
   </div>
 </template>
 <script>
-import Search from "./components/HomeSearch";
-
+import Header from "./components/TheHeader";
+import Photos from './components/HomePagePhotos'
 export default {
   components: {
-    Search
+    Header,
+    Photos
   }
 };
 </script>
