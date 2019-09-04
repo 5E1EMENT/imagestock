@@ -8,25 +8,25 @@
             <rect
               width="10"
               height="10"
-              fill="black"
+              fill="#BDBDBD"
             />
             <rect
               y="13"
               width="10"
               height="10"
-              fill="black"
+              fill="#BDBDBD"
             />
             <rect
               x="13"
               width="10"
               height="10"
-              fill="black"
+              fill="#BDBDBD"
             />
             <rect
               x="13"
               y="13"
               width="10"
               height="10"
-              fill="black"
+              fill="#BDBDBD"
             />
           </svg>

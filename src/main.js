@@ -7,9 +7,11 @@ import './plugins/bootstrap-vue'
 import './fonts/fonts.css'
 import '@babel/polyfill'
 import 'mutationobserver-shim'
+import '@/app/core/specialStyles/masonry.css'
+import ScrollDirective from '@/app/core/directives/scroll.directive.js'
 
 Vue.config.productionTip = false;
-
+Vue.directive('scroll', ScrollDirective)
 new Vue({
   router,
   store,

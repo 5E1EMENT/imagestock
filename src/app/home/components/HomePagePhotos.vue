@@ -2,32 +2,35 @@
   <div class="photos-wrapper">
     <b-container class="photos-container">
       <ul class="photos-buttons">
-        <li class="photos-buttons__item order">
+        <li class="photos-buttons__item">
           <img
             src="@/app/assets/photos/photos-btn__order.svg"
             alt
-            class="photos-button"
+            class="photos-button order"
           >
         </li>
-        <li class="photos-buttons__item decompose">
+        <li class="photos-buttons__item">
           <img
             src="@/app/assets/photos/photos-btn__decompose.svg"
             alt
-            class="photos-button"
+            class="photos-button decompose"
           >
         </li>
       </ul>
-      <div class="photos-container__img">
-        <ul class="photos-img__list">
+      <div class="masonry-wrapper">
+        <ul
+          v-scroll="handleScroll"
+          class="masonry"
+        >
           <li
             v-for="image of images"
             :key="image.id"
-            class="photos-img__item"
+            class="masonry-item"
           >
             <img
               :src="image.urls.small"
               alt="image"
-              class="photos-img__picture"
+              class="masonry-content"
             >
           </li>
         </ul>
@@ -42,13 +45,37 @@ import { mapActions } from "vuex";
 export default {
   data: () => ({
     images: [],
+    imagesPage: 1,
     imgUrl: ""
   }),
+  /**
+   * Load images when the page is ready
+   */
   async mounted() {
-    const photos = await this.$unsplash.photos.listPhotos();
-    const photosArr = await photos.json();
-    this.images = photosArr;
-    console.log(this.images[0]);
+    this.images = await this.getImages();
+  },
+  methods: {
+    /**
+     * Action whitch allows to get images
+     */
+    ...mapActions(["getImages"]),
+    /**
+     * Scroll handler function whitch allows to load images
+     * when the page scroll = page Height
+     */
+    handleScroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+
+        if (bottomOfWindow) {
+          const imagesArr = this.$store.dispatch("getImages").then(newImages => {
+            this.images.push(...newImages);
+          });
+        }
+      };
+    }
   }
 };
 </script>
@@ -75,15 +102,37 @@ export default {
   }
   &-img {
     &__list {
-      display: grid;
-      grid-gap: 27px;
-      grid-template-columns: 1fr 1fr 1fr;
+      display: flex;
+      flex-direction: column;
+
+      flex-wrap: wrap;
       list-style-type: none;
+    }
+    &__item {
+      position: relative;
+      width: 33.33%; // 3 column
+      img {
+        width: 100%;
+        display: block;
+        transition: all 0.8s;
+      }
     }
     &__picture {
       border-radius: 5px;
-      width: 100%;
     }
+  }
+}
+.decompose {
+  filter: invert(100%);
+}
+
+/* Media queries*/
+@media only screen and (max-width: 540px) {
+  .decompose {
+    filter: invert(0%);
+  }
+  .order {
+    filter: invert(100%);
   }
 }
 </style>
