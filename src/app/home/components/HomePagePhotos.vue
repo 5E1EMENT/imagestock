@@ -1,7 +1,13 @@
 <template>
-  <div class="photos-wrapper">
+  <div
+    id="photos-wrapper"
+    class="photos-wrapper"
+  >
     <b-container class="photos-container">
-      <ul class="photos-buttons">
+      <ul
+        id="photos-buttons"
+        class="photos-buttons"
+      >
         <li class="photos-buttons__item">
           <img
             src="@/app/assets/photos/photos-btn__order.svg"
@@ -17,66 +23,40 @@
           >
         </li>
       </ul>
-      <div class="masonry-wrapper">
-        <ul
-          v-scroll="handleScroll"
-          class="masonry"
+
+      <Masonry />
+      <div class="photos-loader">
+        <img
+          src="@/app/assets/photos/photos-loader.svg"
+          alt
+          class="photos-loader__img"
         >
-          <li
-            v-for="image of images"
-            :key="image.id"
-            class="masonry-item"
-          >
-            <img
-              :src="image.urls.small"
-              alt="image"
-              class="masonry-content"
-            >
-          </li>
-        </ul>
       </div>
     </b-container>
   </div>
 </template>
 <script>
+import Masonry from './HomePageMasonry'
+
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
 
 export default {
+  
+  components: {
+    Masonry
+  },
   data: () => ({
     images: [],
-    imagesPage: 1,
-    imgUrl: ""
+
   }),
-  /**
-   * Load images when the page is ready
-   */
-  async mounted() {
-    this.images = await this.getImages();
-  },
   methods: {
     /**
      * Action whitch allows to get images
      */
     ...mapActions(["getImages"]),
-    /**
-     * Scroll handler function whitch allows to load images
-     * when the page scroll = page Height
-     */
-    handleScroll() {
-      window.onscroll = () => {
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.offsetHeight;
-
-        if (bottomOfWindow) {
-          const imagesArr = this.$store.dispatch("getImages").then(newImages => {
-            this.images.push(...newImages);
-          });
-        }
-      };
-    }
-  }
+    
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -90,7 +70,6 @@ export default {
     margin-bottom: 72px;
     &__item {
       margin: 0 10px;
-      cursor: pointer;
     }
   }
   &-wrapper {
@@ -99,29 +78,26 @@ export default {
   }
   &-container {
     max-width: 1478px;
+    position: relative;
   }
   &-img {
-    &__list {
-      display: flex;
-      flex-direction: column;
-
-      flex-wrap: wrap;
-      list-style-type: none;
-    }
-    &__item {
-      position: relative;
-      width: 33.33%; // 3 column
-      img {
-        width: 100%;
-        display: block;
-        transition: all 0.8s;
-      }
-    }
     &__picture {
       border-radius: 5px;
     }
   }
+  &-loader {
+    display: block;
+    text-align: center;
+    position: relative;
+    margin-top: 50px;
+    img {
+      text-align: center;
+      animation: spin 2s linear infinite;
+    }
+  }
+  
 }
+/* Inver photos decompose btn color */
 .decompose {
   filter: invert(100%);
 }
@@ -133,6 +109,13 @@ export default {
   }
   .order {
     filter: invert(100%);
+  }
+}
+/* Animations */
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 </style>

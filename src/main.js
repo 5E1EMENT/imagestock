@@ -2,16 +2,20 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "@/router/router";
 import store from "@/store/store";
+import vueSmoothScroll from 'vue2-smooth-scroll'
+import { VueMasonryPlugin } from "vue-masonry";
 import '@/app/core/configs/unsplash.config.js'
 import './plugins/bootstrap-vue'
 import './fonts/fonts.css'
 import '@babel/polyfill'
 import 'mutationobserver-shim'
 import '@/app/core/specialStyles/masonry.css'
-import ScrollDirective from '@/app/core/directives/scroll.directive.js'
+
 
 Vue.config.productionTip = false;
-Vue.directive('scroll', ScrollDirective)
+Vue.use(vueSmoothScroll)
+Vue.use(VueMasonryPlugin);
+
 new Vue({
   router,
   store,
