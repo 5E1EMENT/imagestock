@@ -1,55 +1,62 @@
 <template>
-  <div class="photos-wrapper">
+  <div
+    id="photos-wrapper"
+    class="photos-wrapper"
+  >
     <b-container class="photos-container">
-      <ul class="photos-buttons">
-        <li class="photos-buttons__item order">
+      <ul
+        id="photos-buttons"
+        class="photos-buttons"
+      >
+        <li class="photos-buttons__item">
           <img
             src="@/app/assets/photos/photos-btn__order.svg"
             alt
-            class="photos-button"
+            class="photos-button order"
           >
         </li>
-        <li class="photos-buttons__item decompose">
+        <li class="photos-buttons__item">
           <img
             src="@/app/assets/photos/photos-btn__decompose.svg"
             alt
-            class="photos-button"
+            class="photos-button decompose"
           >
         </li>
       </ul>
-      <div class="photos-container__img">
-        <ul class="photos-img__list">
-          <li
-            v-for="image of images"
-            :key="image.id"
-            class="photos-img__item"
-          >
-            <img
-              :src="image.urls.small"
-              alt="image"
-              class="photos-img__picture"
-            >
-          </li>
-        </ul>
+
+      <Masonry />
+      <div class="photos-loader">
+        <img
+          src="@/app/assets/photos/photos-loader.svg"
+          alt
+          class="photos-loader__img"
+        >
       </div>
     </b-container>
   </div>
 </template>
 <script>
+import Masonry from './HomePageMasonry'
+
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
 
 export default {
+  
+  components: {
+    Masonry
+  },
   data: () => ({
     images: [],
-    imgUrl: ""
+
   }),
-  async mounted() {
-    const photos = await this.$unsplash.photos.listPhotos();
-    const photosArr = await photos.json();
-    this.images = photosArr;
-    console.log(this.images[0]);
-  }
+  methods: {
+    /**
+     * Action whitch allows to get images
+     */
+    ...mapActions(["getImages"]),
+    
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -63,7 +70,6 @@ export default {
     margin-bottom: 72px;
     &__item {
       margin: 0 10px;
-      cursor: pointer;
     }
   }
   &-wrapper {
@@ -72,18 +78,44 @@ export default {
   }
   &-container {
     max-width: 1478px;
+    position: relative;
   }
   &-img {
-    &__list {
-      display: grid;
-      grid-gap: 27px;
-      grid-template-columns: 1fr 1fr 1fr;
-      list-style-type: none;
-    }
     &__picture {
       border-radius: 5px;
-      width: 100%;
     }
+  }
+  &-loader {
+    display: block;
+    text-align: center;
+    position: relative;
+    margin-top: 50px;
+    img {
+      text-align: center;
+      animation: spin 2s linear infinite;
+    }
+  }
+  
+}
+/* Inver photos decompose btn color */
+.decompose {
+  filter: invert(100%);
+}
+
+/* Media queries*/
+@media only screen and (max-width: 540px) {
+  .decompose {
+    filter: invert(0%);
+  }
+  .order {
+    filter: invert(100%);
+  }
+}
+/* Animations */
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 </style>

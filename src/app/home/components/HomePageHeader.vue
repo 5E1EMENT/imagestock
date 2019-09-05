@@ -20,8 +20,8 @@
 }
 </style>
 <script>
-import Navbar from './TheNavbar'
-import Search from './TheSearch'
+import Navbar from './HomePageNavbar'
+import Search from './HomePageSearch'
 export default {
   components: {
     Navbar,
