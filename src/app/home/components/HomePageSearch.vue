@@ -130,7 +130,7 @@ export default {
       position: absolute;
       display: block;
       width: 100px;
-      height: 100px;
+      height: 100%;
       -webkit-box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
       -moz-box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
       box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
