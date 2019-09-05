@@ -5,7 +5,7 @@
       transition-duration="0.3s"
       :origin-top="true"
       :horizontal-order="true"
-      :fit-width="true"
+      fit-width="true"
       stagger="0.03s"
       item-selector=".masonry-item"
       class="masonry"
@@ -32,26 +32,32 @@
           <h4 class="masonry-image__instagram">
             @vadimsadovsky
           </h4>
-          <ul class="masonry-logos">
-            <li class="masonry-logos__item">
-              <img
-                src="@/app/assets/photo/photo-favorive.svg"
-                alt="favorite-icon"
-              >
-            </li>
-            <li class="masonry-logos__item">
-              <img
-                src="@/app/assets/photo/photo-maximize.svg"
-                alt="maximize-icon"
-              >
-            </li>
-            <li class="masonry-logos__item">
-              <img
-                src="@/app/assets/photo/photo-download.svg"
-                alt="download-icon"
-              >
-            </li>
-          </ul>
+          <div class="masonry-logos">
+            <img
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-favorive.svg"
+              alt="favorite-icon"
+              class="masonry-logos__item favorive"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+            >
+            <img
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-maximize.svg"
+              alt="maximize-icon"
+              class="masonry-logos__item maximize"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+            >
+            <img
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-download.svg"
+              alt="download-icon"
+              class="masonry-logos__item download"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+            >
+          </div>
         </div>
       </li>
     </ul>
@@ -104,6 +110,45 @@ export default {
           this.images.push(...newImages);
         });
       }
+    },
+    /**
+     * Get siblings of an element
+     * @param  {Element} elem
+     * @return {Object}
+     */
+    getSiblings(elem) {
+      var siblings = [];
+      var sibling = elem.parentNode.firstChild;
+      var skipMe = elem;
+      for (; sibling; sibling = sibling.nextSibling)
+        if (sibling.nodeType == 1 && sibling != elem) siblings.push(sibling);
+      return siblings;
+    },
+    /**
+     * Function handles hover start effect and
+     * add unactive class to the sibling elements
+     * @param {Event} event
+     */
+    hoverStart(event) {
+      const icons = this.$refs.masonryIcon;
+      const targetIcon = event.target;
+      const targetSiblings = this.getSiblings(targetIcon);
+      targetSiblings.forEach(element => {
+        element.classList.add("unactive-icon");
+      });
+    },
+    /**
+     * Function handles hover start effect and
+     * add unactive class to the sibling elements
+     * @param {Event} event
+     */
+    hoverLeave(event) {
+      const icons = this.$refs.masonryIcon;
+      const targetIcon = event.target;
+      const targetSiblings = this.getSiblings(targetIcon);
+      targetSiblings.forEach(element => {
+        element.classList.remove("unactive-icon");
+      });
     }
   }
 };
@@ -120,8 +165,8 @@ export default {
     bottom: 0;
   }
   &-item {
-      max-width: 446px;
-      width: 100%;
+    max-width: 446px;
+    width: 100%;
     &:hover {
       .masonry-image__data {
         display: flex;
@@ -130,12 +175,12 @@ export default {
         align-items: center;
       }
       .masonry-image {
-        filter: blur(3px);
+        filter: blur(5px);
       }
     }
   }
   &-image {
-      width: 100%;
+    width: 100%;
     &__data {
       display: none;
       position: absolute;
@@ -160,14 +205,14 @@ export default {
     margin-top: 54px;
     display: flex;
     &__item {
-      margin: 0 22px;
-      img {
-        &:hover {
-          filter: brightness(1.5);
-          transform: scale(1.4);
-        }
+      padding: 0 22px;
+      &:hover {
+        transform: scale(1.4);
       }
     }
   }
+}
+.unactive-icon {
+  filter: brightness(0.3);
 }
 </style>
