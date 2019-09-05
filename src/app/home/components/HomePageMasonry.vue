@@ -2,9 +2,9 @@
   <div class="masonry-wrapper">
     <ul
       v-masonry
-      transition-duration="0.3s"
+      transition-duration="0"
       :origin-top="true"
-      :horizontal-order="true"
+      :horizontal-order="false"
       fit-width="true"
       stagger="0.03s"
       item-selector=".masonry-item"
@@ -34,7 +34,7 @@
             v-if="image.user.instagram_username"
             class="masonry-image__instagram"
           >
-            @ {{ image.user.instagram_username }}
+            @{{ image.user.instagram_username }}
           </h4>
           <div class="masonry-logos">
             <img
@@ -124,7 +124,7 @@ export default {
         window.document.body.scrollHeight -
         window.document.documentElement.clientHeight;
 
-      if (scrollHeight >= maxHeight - 50) {
+      if (scrollHeight >= maxHeight - 200) {
         return false;
       } else {
         this.loadImages = true
@@ -187,7 +187,6 @@ export default {
   &-item {
     max-width: 446px;
     width: 100%;
-
     &:hover {
       .masonry-image__data {
         display: flex;
@@ -196,7 +195,7 @@ export default {
         align-items: center;
       }
       .masonry-image {
-        filter: blur(5px);
+        filter: blur(4px);
       }
     }
   }
