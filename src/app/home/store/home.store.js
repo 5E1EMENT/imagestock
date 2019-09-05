@@ -25,6 +25,7 @@ export default {
           15
         );
         const photosArr = await photosList.json();
+        console.log(photosArr)
         return photosArr;
       } catch (error) {
         throw new error();

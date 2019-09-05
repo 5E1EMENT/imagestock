@@ -23,14 +23,15 @@
         >
         <div class="masonry-image__data">
           <img
-            src
+            :src="image.user.profile_image.medium"
             alt="user-logo"
+            class="masonry-image__profile"
           >
           <h3 class="masonry-image__user">
-            Vadim Sadovsky
+            {{ image.user.username }}
           </h3>
           <h4 class="masonry-image__instagram">
-            @vadimsadovsky
+            @ {{ image.user.instagram_username }}
           </h4>
           <div class="masonry-logos">
             <img
@@ -88,7 +89,6 @@ export default {
   async mounted() {
     window.addEventListener("scroll", this.handleScroll);
     this.images = await this.getImages();
-    this.loading = false;
   },
   methods: {
     /**
@@ -181,6 +181,13 @@ export default {
   }
   &-image {
     width: 100%;
+    &__profile {
+      width: 70px;
+      height: 70px;
+      border-radius: 8px;
+      border: 1px solid #fff;
+      box-sizing: border-box;
+    }
     &__data {
       display: none;
       position: absolute;
@@ -190,6 +197,7 @@ export default {
       left: 0;
     }
     &__user {
+      margin-top: 10px;
       font-family: SF UI Display Light;
       color: #fff;
       font-size: 30px;
@@ -202,7 +210,7 @@ export default {
     }
   }
   &-logos {
-    margin-top: 54px;
+    margin-top: 34px;
     display: flex;
     &__item {
       padding: 0 22px;
@@ -212,7 +220,8 @@ export default {
     }
   }
 }
+/* Class add black background to the icon */
 .unactive-icon {
-  filter: brightness(0.3);
+  filter: brightness(0.5);
 }
 </style>
