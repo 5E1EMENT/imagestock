@@ -10,6 +10,21 @@
   </header>
 </template>
 
+
+<script>
+import Navbar from './HomePageNavbar'
+import Search from './HomePageSearch'
+export default {
+  components: {
+    Navbar,
+    Search
+  },
+  data: () => ({
+    collection: null
+  })
+}
+</script>
+
 <style lang="scss" scoped>
 .header {
   &-wrapper {
@@ -24,13 +39,3 @@
   }
 }
 </style>
-<script>
-import Navbar from './HomePageNavbar'
-import Search from './HomePageSearch'
-export default {
-  components: {
-    Navbar,
-    Search
-  }
-}
-</script>

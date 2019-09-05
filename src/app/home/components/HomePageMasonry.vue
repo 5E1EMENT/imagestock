@@ -79,43 +79,49 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-
+import { mapActions, mapState } from "vuex";
+import { eventBus } from "@/main.js";
 export default {
   data: () => ({
     images: [],
-    loadImages: true
+    loadImages: true,
   }),
+  computed: {
+    ...mapState(['searchCollection'])
+  },
   /**
    * Initialize scroll listener
    * Load images when the page is ready
    */
   async mounted() {
     window.addEventListener("scroll", this.handleScroll);
-    this.images = await this.getImages();
+    this.images = await this.getCollection();
+    eventBus.$on("collection", collection => {
+      this.images = collection;
+    });
   },
   methods: {
     /**
      * Action whitch allows to get images
      */
-    ...mapActions(["getImages"]),
+    ...mapActions(["getCollection"]),
     /**
      * Scroll handler function whitch allows to load images
      * when the page scroll goes to the end
      */
     handleScroll() {
       if (!this.canLoadImg() && this.loadImages) {
-        console.log('laod')
-        this.loadImages = false
-        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
-          this.images.push(...newImages);
-
-        });
+        this.loadImages = false;
+        const imagesArr = this.$store
+          .dispatch("getCollection", this.$store.getters.getsearchCollection)
+          .then(newImages => {
+            this.images.push(...newImages);
+          });
       }
     },
     /**
      * Method allows to prevent multiple requests
-     * @returns {Boolean} if the user is in the img loading area - 
+     * @returns {Boolean} if the user is in the img loading area -
      * allows to send only one request (return false)
      */
     canLoadImg() {
@@ -124,11 +130,11 @@ export default {
         window.document.body.scrollHeight -
         window.document.documentElement.clientHeight;
 
-      if (scrollHeight >= maxHeight - 200) {
+      if (scrollHeight >= maxHeight - 250) {
         return false;
       } else {
-        this.loadImages = true
-        return true
+        this.loadImages = true;
+        return true;
       }
     },
     /**

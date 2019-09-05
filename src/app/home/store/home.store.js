@@ -1,34 +1,40 @@
 export default {
   state: {
     min: 1,
-    max: 1000
+    max: 1000,
+    searchCollection: 'Wallpapers'
   },
   getters: {
-    getMin: s => s.min,
-    getMax: s => s.max
+    getsearchCollection: state => state.searchCollection
+   },
+  mutations: {
+    setCollection: (state, collection) => (state.searchCollection = collection)
   },
-  mutations: {},
   actions: {
     /**
-     * Action gets images arr
+     * Action gets current img collection
      * @param {Object} context vuex context
-     * @param {Object} context.state vuex state
+     * @param {String} collection name of the collection
      * @returns {Array} array of images
      */
-    async getImages({ state }) {
+    async getCollection({state}, collection = 'Wallpapers') {
+      
       try {
         let randPage = Math.floor(
           state.min + Math.random() * (state.max + 1 - state.min)
         );
-        const photosList = await this._vm.$unsplash.photos.listPhotos(
-          randPage,
-          15
-        );
-        const photosArr = await photosList.json();
-        return photosArr;
+        console.log(randPage)
+        const photosCollection = await this._vm.$unsplash.search.photos(collection, randPage, 15 )
+        const photosArr = await photosCollection.json();
+        return photosArr.results;
       } catch (error) {
         throw new error();
       }
+    },
+    async setCollection({commit}, collection) {
+      console.log("action", collection)
+      commit('setCollection', collection)
     }
   }
+  
 };
