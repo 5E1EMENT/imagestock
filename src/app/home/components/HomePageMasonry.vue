@@ -30,7 +30,10 @@
           <h3 class="masonry-image__user">
             {{ image.user.username }}
           </h3>
-          <h4 class="masonry-image__instagram">
+          <h4
+            v-if="image.user.instagram_username"
+            class="masonry-image__instagram"
+          >
             @ {{ image.user.instagram_username }}
           </h4>
           <div class="masonry-logos">
@@ -80,7 +83,8 @@ import { mapActions } from "vuex";
 
 export default {
   data: () => ({
-    images: []
+    images: [],
+    loadImages: true
   }),
   /**
    * Initialize scroll listener
@@ -100,15 +104,31 @@ export default {
      * when the page scroll goes to the end
      */
     handleScroll() {
-      let scrollHeight = window.scrollY;
-      let maxHeight =
+      if (!this.canLoadImg() && this.loadImages) {
+        console.log('laod')
+        this.loadImages = false
+        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
+          this.images.push(...newImages);
+
+        });
+      }
+    },
+    /**
+     * Method allows to prevent multiple requests
+     * @returns {Boolean} if the user is in the img loading area - 
+     * allows to send only one request (return false)
+     */
+    canLoadImg() {
+      var scrollHeight = window.scrollY;
+      var maxHeight =
         window.document.body.scrollHeight -
         window.document.documentElement.clientHeight;
 
-      if (scrollHeight == maxHeight) {
-        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
-          this.images.push(...newImages);
-        });
+      if (scrollHeight >= maxHeight - 50) {
+        return false;
+      } else {
+        this.loadImages = true
+        return true
       }
     },
     /**
@@ -167,6 +187,7 @@ export default {
   &-item {
     max-width: 446px;
     width: 100%;
+
     &:hover {
       .masonry-image__data {
         display: flex;
@@ -181,6 +202,7 @@ export default {
   }
   &-image {
     width: 100%;
+    border-radius: 5px;
     &__profile {
       width: 70px;
       height: 70px;

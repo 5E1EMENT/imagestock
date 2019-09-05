@@ -90,6 +90,7 @@
       list-style-type: none;
     }
     &__item {
+      position: relative;
       &:hover {
         cursor: pointer;
       }
@@ -108,6 +109,32 @@
         font-size: 18px;
         font-family: SF UI Display Light;
       }
+      &:hover {
+          &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            background-color: #fff;
+            height: 2px;
+            width: 30px;
+            bottom: -10px;
+            right: 0;
+            opacity: 1;
+            transition: all 0.3s ease;
+          }
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            background-color: #fff;
+            opacity: 0;
+            height: 2px;
+            width: 30px;
+            bottom: -10px;
+            right: -10px;
+            transition: all 0.3s ease;
+          }
     }
   }
 }
