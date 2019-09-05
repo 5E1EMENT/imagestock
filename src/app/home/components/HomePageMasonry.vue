@@ -201,7 +201,7 @@ export default {
   }
   &-image {
     width: 100%;
-    border-radius: 5px;
+    border-radius: 5px !important;
     &__profile {
       width: 70px;
       height: 70px;
