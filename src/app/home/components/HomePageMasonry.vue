@@ -2,9 +2,9 @@
   <div class="masonry-wrapper">
     <ul
       v-masonry
-      transition-duration="0.3s"
+      transition-duration="0"
       :origin-top="true"
-      :horizontal-order="true"
+      :horizontal-order="false"
       fit-width="true"
       stagger="0.03s"
       item-selector=".masonry-item"
@@ -30,8 +30,11 @@
           <h3 class="masonry-image__user">
             {{ image.user.username }}
           </h3>
-          <h4 class="masonry-image__instagram">
-            @ {{ image.user.instagram_username }}
+          <h4
+            v-if="image.user.instagram_username"
+            class="masonry-image__instagram"
+          >
+            @{{ image.user.instagram_username }}
           </h4>
           <div class="masonry-logos">
             <img
@@ -80,7 +83,8 @@ import { mapActions } from "vuex";
 
 export default {
   data: () => ({
-    images: []
+    images: [],
+    loadImages: true
   }),
   /**
    * Initialize scroll listener
@@ -100,15 +104,31 @@ export default {
      * when the page scroll goes to the end
      */
     handleScroll() {
-      let scrollHeight = window.scrollY;
-      let maxHeight =
+      if (!this.canLoadImg() && this.loadImages) {
+        console.log('laod')
+        this.loadImages = false
+        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
+          this.images.push(...newImages);
+
+        });
+      }
+    },
+    /**
+     * Method allows to prevent multiple requests
+     * @returns {Boolean} if the user is in the img loading area - 
+     * allows to send only one request (return false)
+     */
+    canLoadImg() {
+      var scrollHeight = window.scrollY;
+      var maxHeight =
         window.document.body.scrollHeight -
         window.document.documentElement.clientHeight;
 
-      if (scrollHeight == maxHeight) {
-        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
-          this.images.push(...newImages);
-        });
+      if (scrollHeight >= maxHeight - 200) {
+        return false;
+      } else {
+        this.loadImages = true
+        return true
       }
     },
     /**
@@ -175,12 +195,13 @@ export default {
         align-items: center;
       }
       .masonry-image {
-        filter: blur(5px);
+        filter: blur(4px);
       }
     }
   }
   &-image {
     width: 100%;
+    border-radius: 5px;
     &__profile {
       width: 70px;
       height: 70px;
