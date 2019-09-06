@@ -10,12 +10,28 @@
   </header>
 </template>
 
+
+<script>
+import Navbar from './HomePageNavbar'
+import Search from './HomePageSearch'
+export default {
+  components: {
+    Navbar,
+    Search
+  },
+  data: () => ({
+    collection: null
+  })
+}
+</script>
+
 <style lang="scss" scoped>
 .header {
   &-wrapper {
     background-color: #000;
     color: #fff;
-    padding: 90px 0;
+    padding-top: 40px;
+    padding-bottom: 90px;
     height: 369px;
   }
   &-container {
@@ -24,13 +40,3 @@
   }
 }
 </style>
-<script>
-import Navbar from './HomePageNavbar'
-import Search from './HomePageSearch'
-export default {
-  components: {
-    Navbar,
-    Search
-  }
-}
-</script>

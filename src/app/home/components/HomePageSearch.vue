@@ -4,9 +4,12 @@
       <b-row>
         <b-col>
           <input
+            ref="search"
+            v-model="searchItem"
             type="text"
             class="search-input"
             placeholder="Поиск"
+            @keyup.enter="getCollection($event.target.value)"
           >
         </b-col>
       </b-row>
@@ -17,6 +20,7 @@
               v-for="item of items"
               :key="item"
               class="search-list__item"
+              @click="getCollection(item)"
             >
               {{ item }}
             </li>
@@ -28,13 +32,16 @@
   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
+import {eventBus} from '@/main.js'
+
 export default {
   data: () => ({
+    searchItem: '',
     items: [
       "Wallpapers",
       "Textures & Patterns",
       "Nature",
-      "Current Events",
       "Architecture",
       "Business & Work",
       "Film",
@@ -47,8 +54,24 @@ export default {
       "People",
       "Health",
       "Arts & Culture"
-    ]
-  })
+    ],
+    collection: null
+  }),
+  methods: {
+    ...mapActions(['getCollection', 'setCollection']),
+    /**
+     * Method allows to get current collection of images
+     * Emit's event bus method with collection array
+     * @param item Name of collection
+     */
+     async getCollection(item) {
+      this.$refs.search.blur()
+      this.searchItem = item
+      const collectionArr = await this.$store.dispatch('getCollection', item)
+      eventBus.$emit('collection', collectionArr)
+      await this.setCollection(item)
+    },
+  }
 };
 </script>
 <style lang="scss" scoped>

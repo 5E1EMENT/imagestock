@@ -89,7 +89,7 @@ export default {
         navbar.classList.add("header-sticky");
         header.style.paddingTop = '80px'
       }
-      if (window.pageYOffset <= 90) {
+      if (window.pageYOffset <= 40) {
         navbar.classList.remove("header-sticky");
         header.style.paddingTop = '0'
       }

@@ -79,56 +79,67 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import _ from "lodash";
 
+import { mapActions, mapGetters } from "vuex";
+import { eventBus } from "@/main.js";
 export default {
   data: () => ({
     images: [],
     loadImages: true
   }),
+  computed: {
+    /**
+     * Getter allows to get current search images collection
+     */
+    ...mapGetters(["getSearchCollection"])
+  },
   /**
    * Initialize scroll listener
    * Load images when the page is ready
+   * Get's new images from event bus and replace
+   * old images to the new one
    */
   async mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-    this.images = await this.getImages();
+    this.images = await this.getCollection();
+
+    // Delay scroll handle function
+    let delayedHandler = _.debounce(this.handleScroll, 400);
+    window.addEventListener("scroll", delayedHandler);
+    eventBus.$on("collection", collection => {
+      this.images = collection;
+    });
   },
   methods: {
     /**
      * Action whitch allows to get images
      */
-    ...mapActions(["getImages"]),
+    ...mapActions(["getCollection"]),
     /**
-     * Scroll handler function whitch allows to load images
-     * when the page scroll goes to the end
+     * Load images  when the page scroll goes to the end
      */
-    handleScroll() {
-      if (!this.canLoadImg() && this.loadImages) {
-        console.log('laod')
-        this.loadImages = false
-        const imagesArr = this.$store.dispatch("getImages").then(newImages => {
-          this.images.push(...newImages);
-
-        });
+    loadImg() {
+      if (this.loadImages) {
+        this.loadImages = false;
+        const imagesArr = this.$store
+          .dispatch("getCollection", this.getSearchCollection)
+          .then(newImages => {
+            this.images.push(...newImages);
+          });
       }
     },
     /**
      * Method allows to prevent multiple requests
-     * @returns {Boolean} if the user is in the img loading area - 
-     * allows to send only one request (return false)
+     * and check when user at the bottom -> load new images
      */
-    canLoadImg() {
-      var scrollHeight = window.scrollY;
-      var maxHeight =
-        window.document.body.scrollHeight -
-        window.document.documentElement.clientHeight;
-
-      if (scrollHeight >= maxHeight - 200) {
-        return false;
-      } else {
-        this.loadImages = true
-        return true
+    handleScroll() {
+      const scrollTop = document.documentElement.scrollTop;
+      const viewportHeight = window.innerHeight;
+      const totalHeight = document.documentElement.offsetHeight;
+      const atTheBottom = scrollTop + viewportHeight == totalHeight;
+      if (atTheBottom) {
+        this.loadImages = true;
+        this.loadImg();
       }
     },
     /**
