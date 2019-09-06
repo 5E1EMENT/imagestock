@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import Masonry from './HomePageMasonry'
+import Masonry from '@/app/components/TheMasonry.vue'
 
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";

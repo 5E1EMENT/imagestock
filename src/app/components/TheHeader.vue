@@ -12,8 +12,8 @@
 
 
 <script>
-import Navbar from './HomePageNavbar'
-import Search from './HomePageSearch'
+import Navbar from './TheNavbar'
+import Search from './TheSearch'
 export default {
   components: {
     Navbar,

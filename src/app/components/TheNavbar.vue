@@ -34,24 +34,26 @@
                 class="header-nav__search"
               >
                 <li class="header-nav__item">
-              
                   <img
                     src="@/app/assets/header/Search.svg"
                     alt="Favorites-icon"
                     class="header-nav__item-favorites"
                   >
                   <span class="header-nav__item-text">Поиск</span>
-              
                 </li>
               </a>
-              <li class="header-nav__item">
+              <router-link
+                tag="li"
+                to="/favorites"
+                class="header-nav__item"
+              >
                 <img
                   src="@/app/assets/header/Favorites.svg"
                   alt="Favorites-icon"
                   class="header-nav__item-favorites"
                 >
                 <span class="header-nav__item-text">Избранное</span>
-              </li>
+              </router-link>
               <li class="header-nav__item">
                 <img
                   src="@/app/assets/header/History.svg"
@@ -72,6 +74,9 @@ export default {
   mounted() {
     window.addEventListener("scroll", this.stickyNavbar);
   },
+  destroyed() {
+    window.removeEventListener("scroll", this.stickyNavbar);
+  },
   methods: {
     /**
      * Method allows to correct display
@@ -81,17 +86,14 @@ export default {
       // Get the navbar
       const navbar = this.$refs.navbar;
       // Get the header
-      const header = document.querySelector('.header-container')
+      const header = document.querySelector(".header-container");
       // Get the offset position of the navbar
-      let sticky = navbar.offsetTop ? navbar.offsetTop : 0 ;
+      let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
 
-      if (window.pageYOffset >= sticky) {
+      if (window.pageYOffset >= 40 && header) {
         navbar.classList.add("header-sticky");
-        header.style.paddingTop = '80px'
-      }
-      if (window.pageYOffset <= 40) {
+      } else {
         navbar.classList.remove("header-sticky");
-        header.style.paddingTop = '0'
       }
     }
   }
@@ -163,6 +165,7 @@ export default {
         margin-left: 10px;
         font-size: 18px;
         font-family: SF UI Display Light;
+        color: #fff;
       }
       &:hover {
         &::after {
