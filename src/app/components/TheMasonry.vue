@@ -101,14 +101,15 @@ export default {
    * old images to the new one
    */
   async mounted() {
-    this.images = await this.getCollection();
-
-    // Delay scroll handle function
-    let delayedHandler = _.debounce(this.handleScroll, 400);
-    window.addEventListener("scroll", delayedHandler);
-    eventBus.$on("collection", collection => {
-      this.images = collection;
-    });
+    if (this.$route.path !== "/favorites") {
+      this.images = await this.getCollection();
+      // Delay scroll handle function
+      let delayedHandler = _.debounce(this.handleScroll, 400);
+      window.addEventListener("scroll", delayedHandler);
+      eventBus.$on("collection", collection => {
+        this.images = collection;
+      });
+    }
   },
   methods: {
     /**

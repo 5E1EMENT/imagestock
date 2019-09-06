@@ -95,7 +95,8 @@ export default {
         if (window.pageYOffset >= sticky) {
           headerWrapper.classList.add("active-padding");
           navbar.classList.add("header-sticky");
-        } else {
+        } 
+        if(window.pageYOffset <= 40) {
           headerWrapper.classList.remove("active-padding");
           navbar.classList.remove("header-sticky");
         }
