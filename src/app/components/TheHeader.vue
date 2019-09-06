@@ -12,8 +12,8 @@
 
 
 <script>
-import Navbar from './HomePageNavbar'
-import Search from './HomePageSearch'
+import Navbar from './TheNavbar'
+import Search from './TheSearch'
 export default {
   components: {
     Navbar,
@@ -38,5 +38,8 @@ export default {
     max-width: 1478px;
     padding: 0;
   }
+}
+.active-padding {
+  padding-top: 120px !important;
 }
 </style>

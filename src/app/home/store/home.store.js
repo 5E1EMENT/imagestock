@@ -31,7 +31,6 @@ export default {
       }
     },
     async setCollection({commit}, collection) {
-      console.log("action", collection)
       commit('setCollection', collection)
     }
   }

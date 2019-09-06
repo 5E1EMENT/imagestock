@@ -1,3 +1,5 @@
+import home from "@/app/home/HomePage.vue";
+
 export default [
   {
     path: "",
@@ -6,6 +8,6 @@ export default [
   {
     path: "/home",
     name: "Home",
-    component: () => import("@/app/home/HomePage.vue")
+    component: home
   }
 ];
