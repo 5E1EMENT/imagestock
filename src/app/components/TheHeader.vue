@@ -39,4 +39,7 @@ export default {
     padding: 0;
   }
 }
+.active-padding {
+  padding-top: 120px !important;
+}
 </style>

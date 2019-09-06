@@ -87,13 +87,20 @@ export default {
       const navbar = this.$refs.navbar;
       // Get the header
       const header = document.querySelector(".header-container");
+      const headerWrapper = document.querySelector(".header-wrapper");
       // Get the offset position of the navbar
       let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
-
-      if (window.pageYOffset >= 40 && header) {
+      //If current route is not favorites
+      if (this.$route.path !== "/favorites") {
+        if (window.pageYOffset >= sticky) {
+          headerWrapper.classList.add("active-padding");
+          navbar.classList.add("header-sticky");
+        } else {
+          headerWrapper.classList.remove("active-padding");
+          navbar.classList.remove("header-sticky");
+        }
+      } else if (this.$route.path == "/favorites") {
         navbar.classList.add("header-sticky");
-      } else {
-        navbar.classList.remove("header-sticky");
       }
     }
   }

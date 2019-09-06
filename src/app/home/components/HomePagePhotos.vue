@@ -4,26 +4,7 @@
     class="photos-wrapper"
   >
     <b-container class="photos-container">
-      <ul
-        id="photos-buttons"
-        class="photos-buttons"
-      >
-        <li class="photos-buttons__item">
-          <img
-            src="@/app/assets/photos/photos-btn__order.svg"
-            alt
-            class="photos-button order"
-          >
-        </li>
-        <li class="photos-buttons__item">
-          <img
-            src="@/app/assets/photos/photos-btn__decompose.svg"
-            alt
-            class="photos-button decompose"
-          >
-        </li>
-      </ul>
-
+      <MasonryButtons />
       <Masonry />
       <div class="photos-loader">
         <img
@@ -36,27 +17,26 @@
   </div>
 </template>
 <script>
-import Masonry from '@/app/components/TheMasonry.vue'
+import Masonry from "@/app/components/TheMasonry.vue";
+import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
 
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
 
 export default {
-  
   components: {
-    Masonry
+    Masonry,
+    MasonryButtons
   },
   data: () => ({
-    images: [],
-
+    images: []
   }),
   methods: {
     /**
      * Action whitch allows to get images
      */
-    ...mapActions(["getImages"]),
-    
-  },
+    ...mapActions(["getImages"])
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -95,7 +75,6 @@ export default {
       animation: spin 2s linear infinite;
     }
   }
-  
 }
 /* Inver photos decompose btn color */
 .decompose {

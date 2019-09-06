@@ -6,6 +6,10 @@
       class="favorites-wrapper"
     >
       <b-container class="favorites-container">
+        <h1 class="favorites-title">
+          Избранное
+        </h1> 
+        <MasonryButtons />  
         <Masonry />
       </b-container>
     </div>
@@ -15,11 +19,13 @@
 import Header from "@/app/components/TheHeader";
 import Navbar from "@/app/components/TheNavbar";
 import Masonry from "@/app/components/TheMasonry.vue";
+import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
 
 export default {
   components: {
     Navbar,
-    Masonry
+    Masonry,
+    MasonryButtons
   }
 };
 </script>
@@ -32,6 +38,13 @@ export default {
   &-container {
     max-width: 1478px;
     position: relative;
+  }
+  &-title {
+      text-align: center;
+      font-family: SF UI Display Bold;
+      color: #000;
+font-size: 72px;
+line-height: 86px;
   }
 }
 </style>
