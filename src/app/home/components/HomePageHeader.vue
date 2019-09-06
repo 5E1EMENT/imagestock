@@ -30,7 +30,8 @@ export default {
   &-wrapper {
     background-color: #000;
     color: #fff;
-    padding: 90px 0;
+    padding-top: 40px;
+    padding-bottom: 90px;
     height: 369px;
   }
   &-container {

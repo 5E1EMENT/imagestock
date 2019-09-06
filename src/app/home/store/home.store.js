@@ -1,11 +1,11 @@
 export default {
   state: {
     min: 1,
-    max: 1000,
+    max: 500,
     searchCollection: 'Wallpapers'
   },
   getters: {
-    getsearchCollection: state => state.searchCollection
+    getSearchCollection: state => state.searchCollection
    },
   mutations: {
     setCollection: (state, collection) => (state.searchCollection = collection)
@@ -23,7 +23,6 @@ export default {
         let randPage = Math.floor(
           state.min + Math.random() * (state.max + 1 - state.min)
         );
-        console.log(randPage)
         const photosCollection = await this._vm.$unsplash.search.photos(collection, randPage, 15 )
         const photosArr = await photosCollection.json();
         return photosArr.results;

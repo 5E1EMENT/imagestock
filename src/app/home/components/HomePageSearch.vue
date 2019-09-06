@@ -4,6 +4,7 @@
       <b-row>
         <b-col>
           <input
+            ref="search"
             v-model="searchItem"
             type="text"
             class="search-input"
@@ -60,9 +61,11 @@ export default {
     ...mapActions(['getCollection', 'setCollection']),
     /**
      * Method allows to get current collection of images
+     * Emit's event bus method with collection array
      * @param item Name of collection
      */
      async getCollection(item) {
+      this.$refs.search.blur()
       this.searchItem = item
       const collectionArr = await this.$store.dispatch('getCollection', item)
       eventBus.$emit('collection', collectionArr)

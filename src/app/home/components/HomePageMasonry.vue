@@ -79,23 +79,33 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import _ from "lodash";
+
+import { mapActions, mapGetters } from "vuex";
 import { eventBus } from "@/main.js";
 export default {
   data: () => ({
     images: [],
-    loadImages: true,
+    loadImages: true
   }),
   computed: {
-    ...mapState(['searchCollection'])
+    /**
+     * Getter allows to get current search images collection
+     */
+    ...mapGetters(["getSearchCollection"])
   },
   /**
    * Initialize scroll listener
    * Load images when the page is ready
+   * Get's new images from event bus and replace
+   * old images to the new one
    */
   async mounted() {
-    window.addEventListener("scroll", this.handleScroll);
     this.images = await this.getCollection();
+
+    // Delay scroll handle function
+    let delayedHandler = _.debounce(this.handleScroll, 400);
+    window.addEventListener("scroll", delayedHandler);
     eventBus.$on("collection", collection => {
       this.images = collection;
     });
@@ -106,14 +116,13 @@ export default {
      */
     ...mapActions(["getCollection"]),
     /**
-     * Scroll handler function whitch allows to load images
-     * when the page scroll goes to the end
+     * Load images  when the page scroll goes to the end
      */
-    handleScroll() {
-      if (!this.canLoadImg() && this.loadImages) {
+    loadImg() {
+      if (this.loadImages) {
         this.loadImages = false;
         const imagesArr = this.$store
-          .dispatch("getCollection", this.$store.getters.getsearchCollection)
+          .dispatch("getCollection", this.getSearchCollection)
           .then(newImages => {
             this.images.push(...newImages);
           });
@@ -121,20 +130,16 @@ export default {
     },
     /**
      * Method allows to prevent multiple requests
-     * @returns {Boolean} if the user is in the img loading area -
-     * allows to send only one request (return false)
+     * and check when user at the bottom -> load new images
      */
-    canLoadImg() {
-      var scrollHeight = window.scrollY;
-      var maxHeight =
-        window.document.body.scrollHeight -
-        window.document.documentElement.clientHeight;
-
-      if (scrollHeight >= maxHeight - 250) {
-        return false;
-      } else {
+    handleScroll() {
+      const scrollTop = document.documentElement.scrollTop;
+      const viewportHeight = window.innerHeight;
+      const totalHeight = document.documentElement.offsetHeight;
+      const atTheBottom = scrollTop + viewportHeight == totalHeight;
+      if (atTheBottom) {
         this.loadImages = true;
-        return true;
+        this.loadImg();
       }
     },
     /**
