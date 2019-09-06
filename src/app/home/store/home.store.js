@@ -25,14 +25,12 @@ export default {
         );
         const photosCollection = await this._vm.$unsplash.search.photos(collection, randPage, 15 )
         const photosArr = await photosCollection.json();
-        console.log(photosArr.results)
         return photosArr.results;
       } catch (error) {
         throw new error();
       }
     },
     async setCollection({commit}, collection) {
-      console.log("action", collection)
       commit('setCollection', collection)
     }
   }

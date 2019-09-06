@@ -44,6 +44,7 @@
               class="masonry-logos__item favorive"
               @mouseover="hoverStart"
               @mouseleave="hoverLeave"
+              @click="addToFavorite(image.id)"
             >
             <img
               ref="masonryIcon"
@@ -109,18 +110,20 @@ export default {
       eventBus.$on("collection", collection => {
         this.images = collection;
       });
+    } else if(this.$route.path === '/favorites') {
+      this.images = await this.getFavoritesImg();
     }
   },
   methods: {
     /**
      * Action whitch allows to get images
      */
-    ...mapActions(["getCollection"]),
+    ...mapActions(["getCollection", "getFavoritesImg", "updateLocalStorage"]),
     /**
      * Load images  when the page scroll goes to the end
      */
     loadImg() {
-      if (this.loadImages) {
+      if (this.loadImages && this.$route.path !== '/favorites') {
         this.loadImages = false;
         const imagesArr = this.$store
           .dispatch("getCollection", this.getSearchCollection)
@@ -181,6 +184,16 @@ export default {
       targetSiblings.forEach(element => {
         element.classList.remove("unactive-icon");
       });
+    },
+    /**
+     * Function adds current image to local storage
+     * @param imgId id of current image
+     */
+    async addToFavorite(imgId) {
+      let favoritesArr = JSON.parse(localStorage.getItem('favorites')) || []
+      favoritesArr.push(imgId)
+      localStorage.setItem("favorites", JSON.stringify(favoritesArr));
+      await this.updateLocalStorage(localStorage.getItem('favorites'))
     }
   }
 };
@@ -249,6 +262,9 @@ export default {
       padding: 0 22px;
       &:hover {
         transform: scale(1.4);
+      }
+      &:active {
+        transform: scale(1.8);
       }
     }
   }
