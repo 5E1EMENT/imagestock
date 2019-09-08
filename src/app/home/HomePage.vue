@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <Photos />
   </div>
 </template>
@@ -9,7 +8,6 @@ import Header from "@/app/components/TheHeader";
 import Photos from './components/HomePagePhotos'
 export default {
   components: {
-    Header,
     Photos
   }
 };

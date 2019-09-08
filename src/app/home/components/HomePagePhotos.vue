@@ -6,19 +6,14 @@
     <b-container class="photos-container">
       <MasonryButtons />
       <Masonry />
-      <div class="photos-loader">
-        <img
-          src="@/app/assets/photos/photos-loader.svg"
-          alt
-          class="photos-loader__img"
-        >
-      </div>
+      <Loader />
     </b-container>
   </div>
 </template>
 <script>
 import Masonry from "@/app/components/TheMasonry.vue";
 import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
+import Loader from '@/app/components/TheLoader.vue';
 
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
@@ -26,7 +21,8 @@ import { mapActions } from "vuex";
 export default {
   components: {
     Masonry,
-    MasonryButtons
+    MasonryButtons,
+    Loader
   },
   data: () => ({
     images: []
@@ -65,16 +61,6 @@ export default {
       border-radius: 5px;
     }
   }
-  &-loader {
-    display: block;
-    text-align: center;
-    position: relative;
-    margin-top: 50px;
-    img {
-      text-align: center;
-      animation: spin 2s linear infinite;
-    }
-  }
 }
 /* Inver photos decompose btn color */
 .decompose {
@@ -90,11 +76,5 @@ export default {
     filter: invert(100%);
   }
 }
-/* Animations */
-@keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
+
 </style>

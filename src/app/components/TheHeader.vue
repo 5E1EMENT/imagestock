@@ -1,28 +1,121 @@
 <template>
   <header
+    id="header-wrapper"
     ref="headerWrapper"
     class="header-wrapper"
+    :class="{ 'header-favorites': onFavorites, 'active-padding__home': sticky }"
   >
-    <b-container class="header-container">
-      <Navbar />
-      <Search />
+    <b-container
+      ref="headerContainer"
+      class="header-container"
+    >
+      <Navbar
+        ref="navbar"
+        :sticky="sticky"
+      />
+      <div
+        class="header-container__wrapper"
+        :class="{ 'header-container__wrapper-favorites': onFavorites }"
+      >
+        <Search />
+        <History />
+      </div>
     </b-container>
   </header>
 </template>
 
 
 <script>
-import Navbar from './TheNavbar'
-import Search from './TheSearch'
+import Navbar from "./TheNavbar";
+import Search from "./TheSearch";
+import History from "./TheHistory";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   components: {
     Navbar,
-    Search
+    Search,
+    History
   },
   data: () => ({
-    collection: null
-  })
-}
+    onFavorites: false,
+    sticky: false
+  }),
+  computed: {
+    ...mapGetters(['getHeaderSearch', "getHeaderHistory"])
+  },
+  watch: {
+    /**
+     * When route changes,
+     * our component will be rerendered
+     */
+    $route: {
+      handler: "startComponent",
+      immediate: true
+    }
+  },
+  /**
+   * Method adds sticky navbar
+   */
+  mounted() {
+    this.startComponent();
+    window.addEventListener("scroll", this.stickyNavbar);
+  },
+  /**
+   * When component destroys - remove event listener
+   */
+  destroyed() {
+    window.removeEventListener("scroll", this.stickyNavbar);
+  },
+  methods: {
+    ...mapActions(["invertSearchStatus", "invertHistoryStatus"]),
+    /**
+     * Component will displays depends of current route
+     */
+    startComponent() {
+       if (this.$route.path === "/favorites") {
+        this.onFavorites = true;
+        this.sticky = true;
+        this.invertSearchStatus(false);
+        this.invertHistoryStatus(false);
+      } else if (this.$route.path === "/home") {
+        this.onFavorites = false;
+        this.sticky = false;
+        this.invertSearchStatus(true);
+        this.invertHistoryStatus(false);
+      }
+    },
+    /**
+     * Method allows to correct display
+     * sticky header
+     */
+    stickyNavbar() {
+      // Get the navbar
+      const navbar = this.$refs.navbar.$refs.navbarWrapper;
+      // Get the header
+      const header = this.$refs.headerContainer;
+      const headerWrapper = this.$refs.headerWrapper;
+      // Get the offset position of the navbar
+      let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
+      //If current route is home
+      if (this.$route.path === "/home") {
+        if (window.pageYOffset >= sticky) {
+          this.sticky = true;
+        }
+        if (window.pageYOffset <= 40) {
+          this.sticky = false;
+        }
+      } else if(this.$route.path === "/favorites" && this.getHeaderSearch || this.$route.path === "/favorites" && this.getHeaderHistory) {
+        if (window.pageYOffset >= sticky) {
+          this.sticky = true;
+        }
+        if (window.pageYOffset <= 40) {
+          this.sticky = false;
+        }
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -37,9 +130,27 @@ export default {
   &-container {
     max-width: 1478px;
     padding: 0;
+    
+    transition: 0.3s all ease-in;
+    &__wrapper {
+      overflow: hidden;
+      transition: 0.3s all ease-in;
+      display: block;
+      opacity: 1;
+      &-favorites {
+        display: none;
+      }
+      &-favorites--hidden {
+        opacity: 0;
+      }
+    }
+  }
+  &-favorites {
+    padding: 0;
+    height: auto;
   }
 }
-.active-padding {
+.active-padding__home {
   padding-top: 120px !important;
 }
 </style>

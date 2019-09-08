@@ -1,126 +1,162 @@
 <template>
-  <div id="search">
-    <b-container
-      id="navbar"
-      ref="navbar"
-      class="header-navbar__wrapper"
+  <b-container
+    id="navbar"
+    ref="navbarWrapper"
+    class="navbar-wrapper"
+    :class="{'navbar-sticky': sticky}"
+  >
+    <b-row
+      class="navbar"
+      align-h="between"
     >
-      <b-row
-        class="header-navbar"
-        align-h="between"
-      >
-        <b-col cols="3">
-          <router-link
-            tag="a"
-            to="/home"
-            class="header-link"
-          >
-            <div class="header-logo">
+      <b-col cols="3">
+        <router-link
+          tag="a"
+          to="/home"
+          class="navbar-link"
+        >
+          <div class="navbar-logo">
+            <img
+              src="@/app/assets/header/ImageStock-logo.svg"
+              alt="ImageStock-logo"
+              class="navbar-logo__svg"
+            >
+            <span class="navbar-logo__title">ImageStock</span>
+          </div>
+        </router-link>
+      </b-col>
+      <b-col cols="4">
+        <nav class="navbar-nav">
+          <ul class="navbar-nav__list">
+            <li
+              class="navbar-nav__item search-nav"
+              :class="{ 'nav-active': getHeaderSearch }"
+              @click="showSearch"
+            >
               <img
-                src="@/app/assets/header/ImageStock-logo.svg"
-                alt="ImageStock-logo"
-                class="header-logo__svg"
+                src="@/app/assets/header/Search.svg"
+                alt="Favorites-icon"
+                class="navbar-nav__item-favorites"
               >
-              <span class="header-logo__title">ImageStock</span>
-            </div>
-          </router-link>
-        </b-col>
-        <b-col cols="4">
-          <nav class="header-nav">
-            <ul class="header-nav__list">
-              <a
-                v-smooth-scroll="{ duration: 1000, offset: -150 }"
-                href="#search"
-                class="header-nav__search"
+              <span class="navbar-nav__item-text">Поиск</span>
+            </li>
+
+            <router-link
+              tag="li"
+              to="/favorites"
+              class="navbar-nav__item"
+              @click="showFavorites"
+            >
+              <img
+                src="@/app/assets/header/Favorites.svg"
+                alt="Favorites-icon"
+                class="navbar-nav__item-favorites"
               >
-                <li class="header-nav__item">
-                  <img
-                    src="@/app/assets/header/Search.svg"
-                    alt="Favorites-icon"
-                    class="header-nav__item-favorites"
-                  >
-                  <span class="header-nav__item-text">Поиск</span>
-                </li>
-              </a>
-              <router-link
-                tag="li"
-                to="/favorites"
-                class="header-nav__item"
+              <span class="navbar-nav__item-text">Избранное</span>
+            </router-link>
+
+            <li
+              class="navbar-nav__item history-nav"
+              :class="{ 'nav-active': getHeaderHistory }"
+              @click="showHistory"
+            >
+              <img
+                src="@/app/assets/header/History.svg"
+                alt="History-icon"
+                class="navbar-nav__item-history"
               >
-                <img
-                  src="@/app/assets/header/Favorites.svg"
-                  alt="Favorites-icon"
-                  class="header-nav__item-favorites"
-                >
-                <span class="header-nav__item-text">Избранное</span>
-              </router-link>
-              <li class="header-nav__item">
-                <img
-                  src="@/app/assets/header/History.svg"
-                  alt="History-icon"
-                  class="header-nav__item-history"
-                >
-                <span class="header-nav__item-text">История поиска</span>
-              </li>
-            </ul>
-          </nav>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+              <span class="navbar-nav__item-text">История поиска</span>
+            </li>
+          </ul>
+        </nav>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { eventBus } from "@/main.js";
+import easyScroll from "easy-scroll";
+
 export default {
-  mounted() {
-    window.addEventListener("scroll", this.stickyNavbar);
+  props: {
+    sticky: Boolean
   },
-  destroyed() {
-    window.removeEventListener("scroll", this.stickyNavbar);
+  data: () => ({
+    history: false,
+    search: true
+  }),
+  computed: {
+    /**
+     * Getter allows to get current search component status
+     */
+    ...mapGetters(["getHeaderSearch", "getHeaderHistory"])
   },
+  mounted() {},
   methods: {
     /**
-     * Method allows to correct display
-     * sticky header
+     * Action allwos to inver search component status
      */
-    stickyNavbar() {
-      // Get the navbar
-      const navbar = this.$refs.navbar;
-      // Get the header
-      const header = document.querySelector(".header-container");
-      const headerWrapper = document.querySelector(".header-wrapper");
-      // Get the offset position of the navbar
-      let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
-      //If current route is not favorites
-      if (this.$route.path !== "/favorites") {
-        if (window.pageYOffset >= sticky) {
-          headerWrapper.classList.add("active-padding");
-          navbar.classList.add("header-sticky");
-        } 
-        if(window.pageYOffset <= 40) {
-          headerWrapper.classList.remove("active-padding");
-          navbar.classList.remove("header-sticky");
+    ...mapActions(["invertSearchStatus", "invertHistoryStatus"]),
+    /**
+     * Method allow to show search component
+     */
+    showSearch() {
+      if (!this.getHeaderSearch) {
+        if (this.$route.path === "/favorites") {
+          this.$parent.onFavorites = false;
+          this.$parent.sticky = false;
         }
-      } else if (this.$route.path == "/favorites") {
-        navbar.classList.add("header-sticky");
+        this.invertSearchStatus(true);
+        this.invertHistoryStatus(false);
       }
+       /** Smooth scroll to the top */
+      easyScroll({
+        scrollableDomEle: window,
+        direction: "top",
+        duration: 500,
+        easingPreset: "easeInOutCubic"
+      });
+    },
+    showFavorites() {
+      if(this.$route.path === '/favorites') {
+        
+      }
+    },
+    /**
+     * Method allow to show history component
+     */
+    showHistory() {
+      if (!this.getHeaderHistory) {
+        if (this.$route.path === "/favorites") {
+          this.$parent.onFavorites = false;
+        }
+        this.invertSearchStatus(false);
+        this.invertHistoryStatus(true);
+      }
+      /** Smooth scroll to the top */
+      easyScroll({
+        scrollableDomEle: window,
+        direction: "top",
+        duration: 500,
+        easingPreset: "easeInOutCubic"
+      });
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.header {
-  &-navbar__wrapper {
+.navbar {
+  max-width: 1478px;
+  width: 100%;
+  margin: 0 auto;
+  &-wrapper {
     top: 0;
     left: 0;
     max-width: 100%;
     z-index: 999;
     background: #000;
     padding: 25px 0;
-  }
-  &-navbar {
-    max-width: 1478px;
-    width: 100%;
-    margin: 0 auto;
   }
   &-link {
     text-decoration: none;
@@ -151,7 +187,8 @@ export default {
     &__search {
       text-decoration: none;
       color: #fff;
-      opacity: 0;
+      opacity: 1;
+      visibility: visible;
       transition: all 0.3s ease;
     }
     &__item {
@@ -205,9 +242,28 @@ export default {
   }
   &-sticky {
     position: fixed;
-    .header-nav__search {
+    .navbar-nav__search {
       opacity: 1;
+      visibility: visible;
     }
+  }
+}
+.search-unactive {
+  opacity: 0;
+  visibility: hidden;
+}
+.nav-active {
+  &::after {
+    content: "";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    height: 2px;
+    width: 30px;
+    bottom: -10px;
+    right: 0;
+    opacity: 1;
+    transition: all 0.3s ease;
   }
 }
 </style>

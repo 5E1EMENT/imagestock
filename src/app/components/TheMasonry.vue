@@ -67,9 +67,10 @@
       </li>
     </ul>
     <a
+      v-if="loaded"
       v-smooth-scroll="{ duration: 1000, offset: -350 }"
       class="masonry-top"
-      href="#photos-wrapper"
+      href="#search"
     >
       <img
         src="@/app/assets/photos/photos-btn__top.svg"
@@ -81,13 +82,15 @@
 </template>
 <script>
 import _ from "lodash";
-
+import getSiblings from "@/app/core/utils/siblings.utils.js";
 import { mapActions, mapGetters } from "vuex";
 import { eventBus } from "@/main.js";
+
 export default {
   data: () => ({
     images: [],
-    loadImages: true
+    loadImages: true,
+    loaded: false
   }),
   computed: {
     /**
@@ -110,20 +113,33 @@ export default {
       eventBus.$on("collection", collection => {
         this.images = collection;
       });
-    } else if(this.$route.path === '/favorites') {
-      this.images = await this.getFavoritesImg();
+      this.loaded = true;
+    } else if (this.$route.path === "/favorites") {
+      this.getFavorites();
     }
+    
   },
   methods: {
     /**
      * Action whitch allows to get images
      */
     ...mapActions(["getCollection", "getFavoritesImg", "updateLocalStorage"]),
+    async getFavorites() {
+      this.images = await this.getFavoritesImg();
+      this.$emit("loadedFavorites", false);
+      this.loaded = true;
+      eventBus.$on("collection", collection => {
+        this.images = collection;
+      });
+      eventBus.$on("showFavorites", collection => {
+        this.images = collection;
+      });
+    },
     /**
      * Load images  when the page scroll goes to the end
      */
     loadImg() {
-      if (this.loadImages && this.$route.path !== '/favorites') {
+      if (this.loadImages) {
         this.loadImages = false;
         const imagesArr = this.$store
           .dispatch("getCollection", this.getSearchCollection)
@@ -147,19 +163,6 @@ export default {
       }
     },
     /**
-     * Get siblings of an element
-     * @param  {Element} elem
-     * @return {Object}
-     */
-    getSiblings(elem) {
-      var siblings = [];
-      var sibling = elem.parentNode.firstChild;
-      var skipMe = elem;
-      for (; sibling; sibling = sibling.nextSibling)
-        if (sibling.nodeType == 1 && sibling != elem) siblings.push(sibling);
-      return siblings;
-    },
-    /**
      * Function handles hover start effect and
      * add unactive class to the sibling elements
      * @param {Event} event
@@ -167,7 +170,7 @@ export default {
     hoverStart(event) {
       const icons = this.$refs.masonryIcon;
       const targetIcon = event.target;
-      const targetSiblings = this.getSiblings(targetIcon);
+      const targetSiblings = getSiblings(targetIcon);
       targetSiblings.forEach(element => {
         element.classList.add("unactive-icon");
       });
@@ -180,7 +183,7 @@ export default {
     hoverLeave(event) {
       const icons = this.$refs.masonryIcon;
       const targetIcon = event.target;
-      const targetSiblings = this.getSiblings(targetIcon);
+      const targetSiblings = getSiblings(targetIcon);
       targetSiblings.forEach(element => {
         element.classList.remove("unactive-icon");
       });
@@ -190,10 +193,10 @@ export default {
      * @param imgId id of current image
      */
     async addToFavorite(imgId) {
-      let favoritesArr = JSON.parse(localStorage.getItem('favorites')) || []
-      favoritesArr.push(imgId)
+      let favoritesArr = JSON.parse(localStorage.getItem("favorites")) || [];
+      favoritesArr.push(imgId);
       localStorage.setItem("favorites", JSON.stringify(favoritesArr));
-      await this.updateLocalStorage(localStorage.getItem('favorites'))
+      await this.updateLocalStorage(localStorage.getItem("favorites"));
     }
   }
 };
@@ -206,7 +209,7 @@ export default {
       cursor: pointer;
     }
     position: absolute;
-    right: 0;
+    right: -50px;
     bottom: 0;
   }
   &-item {

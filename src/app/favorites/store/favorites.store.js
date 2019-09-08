@@ -3,10 +3,10 @@ export default {
     favorites: localStorage.getItem("favorites")
   },
   getters: {
-    getFavorites: s => s.favorites
+    getFavorites: s => s.favorites,
   },
   mutations: {
-    setLocalStorage: (state, favorites) => (state.favorites = favorites)
+    setFavoritesLocalStorage: (state, favorites) => (state.favorites = favorites),
   },
   actions: {
     /**
@@ -18,7 +18,7 @@ export default {
      */
     async getFavoritesImg({ state }) {
       try {
-        const favoritesArr = JSON.parse(state.favorites);
+        const favoritesArr = JSON.parse(state.favorites) || [];
         const resultFavoritesArr = [];
 
         await Promise.all(
@@ -31,7 +31,7 @@ export default {
           })
         );
 
-        return resultFavoritesArr;
+        return resultFavoritesArr ? resultFavoritesArr: []  ;
       } catch (error) {
         throw new error();
       }
@@ -43,7 +43,7 @@ export default {
      * @param {Array} favorites array of images from localstorage
      */
     updateLocalStorage({ commit }, favorites) {
-      commit("setLocalStorage", favorites);
-    }
+      commit("setFavoritesLocalStorage", favorites);
+    },
   }
 };

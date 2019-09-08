@@ -1,5 +1,8 @@
 <template>
-  <div class="search">
+  <div
+    class="search"
+    :class="{ 'search-active': getHeaderSearch }"
+  >
     <b-container class="search-container">
       <b-row>
         <b-col>
@@ -9,7 +12,7 @@
             type="text"
             class="search-input"
             placeholder="Поиск"
-            @keyup.enter="getCollection($event.target.value)"
+            @keyup.enter="getCollection($event.target.value), addHistory($event.target.value)"
           >
         </b-col>
       </b-row>
@@ -20,7 +23,7 @@
               v-for="item of items"
               :key="item"
               class="search-list__item"
-              @click="getCollection(item)"
+              @click="getCollection(item), addHistory(item)"
             >
               {{ item }}
             </li>
@@ -32,12 +35,12 @@
   </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
-import {eventBus} from '@/main.js'
+import { mapActions, mapGetters } from "vuex";
+import { eventBus } from "@/main.js";
 
 export default {
   data: () => ({
-    searchItem: '',
+    searchItem: "",
     items: [
       "Wallpapers",
       "Textures & Patterns",
@@ -57,25 +60,41 @@ export default {
     ],
     collection: null
   }),
+  computed: {
+    ...mapGetters(["getHeaderSearch"])
+  },
   methods: {
-    ...mapActions(['getCollection', 'setCollection']),
+    ...mapActions(["getCollection", "setCollection", "updateHistory"]),
     /**
      * Method allows to get current collection of images
      * Emit's event bus method with collection array
      * @param item Name of collection
      */
-     async getCollection(item) {
-      this.$refs.search.blur()
-      this.searchItem = item
-      const collectionArr = await this.$store.dispatch('getCollection', item)
-      eventBus.$emit('collection', collectionArr)
-      await this.setCollection(item)
+    async getCollection(item) {
+      if(this.$route.path === '/favorites') {
+        this.$router.push('/home')
+      }
+      this.$refs.search.blur();
+      this.searchItem = item;
+      const collectionArr = await this.$store.dispatch("getCollection", item);
+      eventBus.$emit("collection", collectionArr);
+      await this.setCollection(item);
+      
     },
+    /**
+     * Method allows to add current search item to localstorage
+     * @param item Name of collection
+     */
+    async addHistory(item) {
+      let historyArr = JSON.parse(localStorage.getItem("history")) || [];
+      historyArr.push(item);
+      localStorage.setItem("history", JSON.stringify(historyArr));
+      await this.updateHistory(localStorage.getItem("history"));
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-
 /* Placeholder color */
 ::-webkit-input-placeholder {
   color: #fff;
@@ -100,6 +119,9 @@ export default {
 }
 
 .search {
+  opacity: 0;
+  transform: translateY(-300px);
+  transition: 0.5s all linear;
   &-container {
     max-width: 1200px;
   }
@@ -173,14 +195,27 @@ export default {
     &__item {
       position: relative;
       margin-left: 20px;
+      color: #fff;
       cursor: pointer;
       &:nth-child(1) {
         margin-left: 0;
       }
     }
   }
+  &-active {
+    opacity: 1;
+    transform: translateY(0);
+    background: #000;
+  }
+  &-favorites {
+    opacity: 1;
+    transform: translateY(0);
+    background: #000;
+    padding-bottom: 40px;
+    padding-top: 90px;
+  }
 }
 .empty {
-    width: 60px;
+  width: 60px;
 }
 </style>
