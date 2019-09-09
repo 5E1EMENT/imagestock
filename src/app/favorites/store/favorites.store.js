@@ -13,7 +13,6 @@ export default {
      * Action gets favorites images from localstorage
      * @param {Object} context vuex context
      * @param {Object} context.state vuex state
-     * @param {Object} context.state vuex state
      * @returns {Array} array of images
      */
     async getFavoritesImg({ state }) {

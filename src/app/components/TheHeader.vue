@@ -3,7 +3,7 @@
     id="header-wrapper"
     ref="headerWrapper"
     class="header-wrapper"
-    :class="{ 'header-favorites': onFavorites, 'active-padding__home': sticky }"
+    :class="{ 'header-favorites': onFavorites, 'active-padding': sticky && !onFavorites , 'active-padding__photo': sticky && onPhoto }"
   >
     <b-container
       ref="headerContainer"
@@ -39,10 +39,11 @@ export default {
   },
   data: () => ({
     onFavorites: false,
+    onPhoto: false,
     sticky: false
   }),
   computed: {
-    ...mapGetters(['getHeaderSearch', "getHeaderHistory"])
+    ...mapGetters(["getHeaderSearch", "getHeaderHistory"])
   },
   watch: {
     /**
@@ -73,7 +74,8 @@ export default {
      * Component will displays depends of current route
      */
     startComponent() {
-       if (this.$route.path === "/favorites") {
+      if (this.$route.path === "/favorites") {
+        this.onPhoto = false
         this.onFavorites = true;
         this.sticky = true;
         this.invertSearchStatus(false);
@@ -83,7 +85,14 @@ export default {
         this.sticky = false;
         this.invertSearchStatus(true);
         this.invertHistoryStatus(false);
+      } else if(this.$route.params.imgId){
+        this.onPhoto = true
+        this.onFavorites = true;
+        this.sticky = false;
+        this.invertSearchStatus(false);
+        this.invertHistoryStatus(false);
       }
+      
     },
     /**
      * Method allows to correct display
@@ -98,6 +107,7 @@ export default {
       // Get the offset position of the navbar
       let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
       //If current route is home
+      
       if (this.$route.path === "/home") {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
@@ -105,7 +115,16 @@ export default {
         if (window.pageYOffset <= 40) {
           this.sticky = false;
         }
-      } else if(this.$route.path === "/favorites" && this.getHeaderSearch || this.$route.path === "/favorites" && this.getHeaderHistory) {
+      } else if (
+        (this.$route.path === "/favorites" && this.getHeaderSearch) || (this.$route.path === "/favorites" && this.getHeaderHistory)
+      ) {
+        if (window.pageYOffset >= sticky) {
+          this.sticky = true;
+        }
+        if (window.pageYOffset <= 40) {
+          this.sticky = false;
+        }
+      } else if(this.$route.params.imgId) {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
         }
@@ -130,7 +149,7 @@ export default {
   &-container {
     max-width: 1478px;
     padding: 0;
-    
+
     transition: 0.3s all ease-in;
     &__wrapper {
       overflow: hidden;
@@ -150,7 +169,10 @@ export default {
     height: auto;
   }
 }
-.active-padding__home {
+.active-padding {
   padding-top: 120px !important;
+}
+.active-padding__photo {
+  padding-top: 141px !important;
 }
 </style>

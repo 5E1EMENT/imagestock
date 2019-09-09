@@ -45,7 +45,6 @@
               tag="li"
               to="/favorites"
               class="navbar-nav__item"
-              @click="showFavorites"
             >
               <img
                 src="@/app/assets/header/Favorites.svg"
@@ -103,8 +102,9 @@ export default {
      */
     showSearch() {
       if (!this.getHeaderSearch) {
-        if (this.$route.path === "/favorites") {
+        if (this.$route.path === "/favorites" || this.$route.params.imgId) {
           this.$parent.onFavorites = false;
+          this.$parent.onPhoto = false;
           this.$parent.sticky = false;
         }
         this.invertSearchStatus(true);
@@ -118,18 +118,14 @@ export default {
         easingPreset: "easeInOutCubic"
       });
     },
-    showFavorites() {
-      if(this.$route.path === '/favorites') {
-        
-      }
-    },
     /**
      * Method allow to show history component
      */
     showHistory() {
       if (!this.getHeaderHistory) {
-        if (this.$route.path === "/favorites") {
+        if (this.$route.path === "/favorites" || this.$route.params.imgId) {
           this.$parent.onFavorites = false;
+          this.$parent.onPhoto = false;
         }
         this.invertSearchStatus(false);
         this.invertHistoryStatus(true);
@@ -150,6 +146,7 @@ export default {
   max-width: 1478px;
   width: 100%;
   margin: 0 auto;
+  padding: 0;
   &-wrapper {
     top: 0;
     left: 0;

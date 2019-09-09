@@ -46,14 +46,16 @@
               @mouseleave="hoverLeave"
               @click="addToFavorite(image.id)"
             >
-            <img
-              ref="masonryIcon"
-              src="@/app/assets/photo/photo-maximize.svg"
-              alt="maximize-icon"
-              class="masonry-logos__item maximize"
-              @mouseover="hoverStart"
-              @mouseleave="hoverLeave"
-            >
+            <router-link :to="{ name: 'Photo', params: { imgId: image.id }}">
+              <img
+                ref="masonryIcon"
+                src="@/app/assets/photo/photo-maximize.svg"
+                alt="maximize-icon"
+                class="masonry-logos__item maximize"
+                @mouseover="hoverStart"
+                @mouseleave="hoverLeave"
+              >
+            </router-link>
             <img
               ref="masonryIcon"
               src="@/app/assets/photo/photo-download.svg"
@@ -61,16 +63,16 @@
               class="masonry-logos__item download"
               @mouseover="hoverStart"
               @mouseleave="hoverLeave"
+              @click="downloadImg(image.id)"
             >
           </div>
         </div>
       </li>
     </ul>
     <a
-      v-if="loaded"
-      v-smooth-scroll="{ duration: 1000, offset: -350 }"
+      v-if="loaded && !images"
       class="masonry-top"
-      href="#search"
+      @click="scrollTop"
     >
       <img
         src="@/app/assets/photos/photos-btn__top.svg"
@@ -83,6 +85,7 @@
 <script>
 import _ from "lodash";
 import getSiblings from "@/app/core/utils/siblings.utils.js";
+import easyScroll from "easy-scroll";
 import { mapActions, mapGetters } from "vuex";
 import { eventBus } from "@/main.js";
 
@@ -105,7 +108,7 @@ export default {
    * old images to the new one
    */
   async mounted() {
-    if (this.$route.path !== "/favorites") {
+    if (this.$route.path === "/home") {
       this.images = await this.getCollection();
       // Delay scroll handle function
       let delayedHandler = _.debounce(this.handleScroll, 400);
@@ -116,16 +119,28 @@ export default {
       this.loaded = true;
     } else if (this.$route.path === "/favorites") {
       this.getFavorites();
+    } else {
+      console.log(1)
+      this.getSimilar();
     }
-    
   },
   methods: {
     /**
      * Action whitch allows to get images
      */
-    ...mapActions(["getCollection", "getFavoritesImg", "updateLocalStorage"]),
+    ...mapActions([
+      "getCollection",
+      "getFavoritesImg",
+      "updateLocalStorage",
+      "dowloadPhoto",
+      "getSimilarImg"
+    ]),
+    /**
+     * Method allows to laod favorites images
+     */
     async getFavorites() {
-      this.images = await this.getFavoritesImg();
+      const favoriteImages = await this.getFavoritesImg();
+      this.images = _.uniqWith(favoriteImages, _.isEqual)
       this.$emit("loadedFavorites", false);
       this.loaded = true;
       eventBus.$on("collection", collection => {
@@ -134,6 +149,12 @@ export default {
       eventBus.$on("showFavorites", collection => {
         this.images = collection;
       });
+    },
+    async getSimilar() {
+      const imgId = this.$route.params.imgId;
+      this.images = await this.getSimilarImg(imgId)
+      console.log(img)
+      this.loaded = true;
     },
     /**
      * Load images  when the page scroll goes to the end
@@ -156,7 +177,7 @@ export default {
       const scrollTop = document.documentElement.scrollTop;
       const viewportHeight = window.innerHeight;
       const totalHeight = document.documentElement.offsetHeight;
-      const atTheBottom = scrollTop + viewportHeight == totalHeight;
+      const atTheBottom = scrollTop + viewportHeight >= totalHeight;
       if (atTheBottom) {
         this.loadImages = true;
         this.loadImg();
@@ -197,6 +218,22 @@ export default {
       favoritesArr.push(imgId);
       localStorage.setItem("favorites", JSON.stringify(favoritesArr));
       await this.updateLocalStorage(localStorage.getItem("favorites"));
+    },
+    scrollTop() {
+      /** Smooth scroll to the top */
+      easyScroll({
+        scrollableDomEle: window,
+        direction: "top",
+        duration: 500,
+        easingPreset: "easeInOutCubic"
+      });
+    },
+    /**
+     * Method allows to download current img
+     */
+    async downloadImg(imgId) {
+      const downloadUrl = await this.dowloadPhoto(imgId)
+      location.assign(downloadUrl);
     }
   }
 };

@@ -55,6 +55,7 @@ export default {
   &-container {
     max-width: 1478px;
     position: relative;
+    padding: 0;
   }
   &-img {
     &__picture {
