@@ -71,7 +71,7 @@ export default {
      * @param item Name of collection
      */
     async getCollection(item) {
-      if(this.$route.path === '/favorites') {
+      if(this.$route.path === '/favorites' || this.$route.params.imgId) {
         this.$router.push('/home')
       }
       this.$refs.search.blur();

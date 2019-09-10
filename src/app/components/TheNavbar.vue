@@ -30,7 +30,7 @@
           <ul class="navbar-nav__list">
             <li
               class="navbar-nav__item search-nav"
-              :class="{ 'nav-active': getHeaderSearch }"
+              :class="{ 'nav-active': getHeaderSearch}"
               @click="showSearch"
             >
               <img
@@ -45,7 +45,6 @@
               tag="li"
               to="/favorites"
               class="navbar-nav__item"
-              @click="showFavorites"
             >
               <img
                 src="@/app/assets/header/Favorites.svg"
@@ -90,9 +89,8 @@ export default {
     /**
      * Getter allows to get current search component status
      */
-    ...mapGetters(["getHeaderSearch", "getHeaderHistory"])
+    ...mapGetters(["getHeaderSearch", "getHeaderHistory"]),
   },
-  mounted() {},
   methods: {
     /**
      * Action allwos to inver search component status
@@ -103,8 +101,9 @@ export default {
      */
     showSearch() {
       if (!this.getHeaderSearch) {
-        if (this.$route.path === "/favorites") {
+        if (this.$route.path === "/favorites" || this.$route.params.imgId) {
           this.$parent.onFavorites = false;
+          this.$parent.onPhoto = false;
           this.$parent.sticky = false;
         }
         this.invertSearchStatus(true);
@@ -118,18 +117,14 @@ export default {
         easingPreset: "easeInOutCubic"
       });
     },
-    showFavorites() {
-      if(this.$route.path === '/favorites') {
-        
-      }
-    },
     /**
      * Method allow to show history component
      */
     showHistory() {
       if (!this.getHeaderHistory) {
-        if (this.$route.path === "/favorites") {
+        if (this.$route.path === "/favorites" || this.$route.params.imgId) {
           this.$parent.onFavorites = false;
+          this.$parent.onPhoto = false;
         }
         this.invertSearchStatus(false);
         this.invertHistoryStatus(true);
@@ -150,6 +145,7 @@ export default {
   max-width: 1478px;
   width: 100%;
   margin: 0 auto;
+  padding: 0;
   &-wrapper {
     top: 0;
     left: 0;
@@ -248,9 +244,10 @@ export default {
     }
   }
 }
-.search-unactive {
-  opacity: 0;
-  visibility: hidden;
+.search-nav {
+  opacity: 1;
+  visibility: visible;
+  transition: 0.3s all ease-in;
 }
 .nav-active {
   &::after {

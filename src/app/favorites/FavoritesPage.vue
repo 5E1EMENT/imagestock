@@ -89,6 +89,7 @@ export default {
   &-wrapper {
     background-color: #fff;
     padding: 77px 0;
+    padding-top: 110px;
   }
   &-container {
     max-width: 1478px;

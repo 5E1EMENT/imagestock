@@ -1,7 +1,7 @@
 export default [
     {
-      path: "/photo",
-      name: "Favorites",
+      path: "/photo/:imgId",
+      name: "Photo",
       component: () => import("@/app/photo/PhotoPage.vue")
     }
   ];
