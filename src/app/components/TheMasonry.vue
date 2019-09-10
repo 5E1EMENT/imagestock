@@ -45,6 +45,17 @@
           </h4>
           <div class="masonry-logos">
             <img
+              v-if="isOnPhoto"
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-favorive.svg"
+              alt="favorite-icon"
+              class="masonry-logos__item favorive"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+              @click="addToFavorite(image.cover_photo.id)"
+            >
+            <img
+              v-else
               ref="masonryIcon"
               src="@/app/assets/photo/photo-favorive.svg"
               alt="favorite-icon"
