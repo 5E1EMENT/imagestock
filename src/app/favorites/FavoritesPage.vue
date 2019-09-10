@@ -84,12 +84,19 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+@import "@/scss/main.scss";
 .favorites {
   &-wrapper {
     background-color: #fff;
     padding: 77px 0;
     padding-top: 110px;
+    @include tablets-small-up {
+     padding-top: 40px;
+    }
+    @include phones {
+      padding-top: 30px;
+    }
   }
   &-container {
     max-width: 1478px;

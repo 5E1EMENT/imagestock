@@ -320,6 +320,9 @@ export default {
   @include tablets-small {
      max-width: 450px;
   }
+  @include horizontal-mobile {
+     max-width: auto;
+	}
    @include phones {
      max-width: 380px;
   }
@@ -329,9 +332,7 @@ export default {
    @include iphone {
      max-width: 290px;
   }
-  @include horizontal-mobile {
-     max-width: auto;
-	}
+  
   }
   &-image {
     width: 100%;
@@ -342,6 +343,10 @@ export default {
       border-radius: 8px;
       border: 1px solid #fff;
       box-sizing: border-box;
+    @include desktop-large {
+     width: 50px;
+      height: 50px;
+  }
     }
     &__data {
       display: none;
@@ -357,18 +362,60 @@ export default {
       color: #fff;
       font-size: 30px;
       line-height: 36px;
+      @include phones {
+     font-size: 25px;
+  }
     }
     &__instagram {
       font-family: SF UI Display Light;
       color: #fff;
       font-size: 18px;
+      @include phones {
+     font-size: 15px;
+  }
     }
   }
   &-logos {
     margin-top: 34px;
     display: flex;
+    max-width: 160px;
+    width: 100%;
+    justify-content: space-between;
+    @include desktop-large {
+        max-width: 120px;
+      }
+      @include desktop {
+        max-width: 150px;
+        margin-top: 20px;
+      }
+      @include tablets-small-up {
+        max-width: 200px;
+        margin-top: 30px;
+      }
+      @include phones {
+     max-width: 140px;
+  }
     &__item {
-      padding: 0 22px;
+      @include desktop-large {
+        width: 25px;
+        height: 25px;
+      }
+      @include desktop {
+        width: 30px;
+        height: 30px;
+      }
+      @include tablets-large {
+        width: 25px;
+        height: 25px;
+      }
+      @include tablets-small-up {
+        width: 35px;
+        height: 35px;
+      }
+      @include phones {
+     width: 25px;
+        height: 25px;
+  }
       &:hover {
         transform: scale(1.4);
       }
