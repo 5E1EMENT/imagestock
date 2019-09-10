@@ -17,6 +17,13 @@
         class="masonry-item"
       >
         <img
+          v-if="isOnPhoto"
+          :src="image.cover_photo.urls.small"
+          alt="image"
+          class="masonry-image"
+        >
+        <img
+          v-else
           :src="image.urls.small"
           alt="image"
           class="masonry-image"
@@ -46,16 +53,27 @@
               @mouseleave="hoverLeave"
               @click="addToFavorite(image.id)"
             >
-            <router-link :to="{ name: 'Photo', params: { imgId: image.id }}">
-              <img
-                ref="masonryIcon"
-                src="@/app/assets/photo/photo-maximize.svg"
-                alt="maximize-icon"
-                class="masonry-logos__item maximize"
-                @mouseover="hoverStart"
-                @mouseleave="hoverLeave"
-              >
-            </router-link>
+            <img
+              v-if="isOnPhoto"
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-maximize.svg"
+              alt="maximize-icon"
+              class="masonry-logos__item maximize"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+              @click="goToPhoto(image.cover_photo.id)"
+            >
+
+            <img
+              v-else
+              ref="masonryIcon"
+              src="@/app/assets/photo/photo-maximize.svg"
+              alt="maximize-icon"
+              class="masonry-logos__item maximize"
+              @mouseover="hoverStart"
+              @mouseleave="hoverLeave"
+              @click="goToPhoto(image.id)"
+            >
             <img
               ref="masonryIcon"
               src="@/app/assets/photo/photo-download.svg"
@@ -70,7 +88,7 @@
       </li>
     </ul>
     <a
-      v-if="loaded && !images"
+      v-if="loaded && !images || isOnPhoto"
       class="masonry-top"
       @click="scrollTop"
     >
@@ -99,7 +117,13 @@ export default {
     /**
      * Getter allows to get current search images collection
      */
-    ...mapGetters(["getSearchCollection"])
+    ...mapGetters(["getSearchCollection"]),
+    /**
+     * Check if current page is photo page
+     */
+    isOnPhoto() {
+      return this.$route.params.imgId;
+    }
   },
   /**
    * Initialize scroll listener
@@ -120,7 +144,6 @@ export default {
     } else if (this.$route.path === "/favorites") {
       this.getFavorites();
     } else {
-      console.log(1)
       this.getSimilar();
     }
   },
@@ -140,7 +163,7 @@ export default {
      */
     async getFavorites() {
       const favoriteImages = await this.getFavoritesImg();
-      this.images = _.uniqWith(favoriteImages, _.isEqual)
+      this.images = _.uniqWith(favoriteImages, _.isEqual);
       this.$emit("loadedFavorites", false);
       this.loaded = true;
       eventBus.$on("collection", collection => {
@@ -152,8 +175,8 @@ export default {
     },
     async getSimilar() {
       const imgId = this.$route.params.imgId;
-      this.images = await this.getSimilarImg(imgId)
-      console.log(img)
+      this.images = await this.getSimilarImg(imgId);
+      console.log(this.images);
       this.loaded = true;
     },
     /**
@@ -232,8 +255,11 @@ export default {
      * Method allows to download current img
      */
     async downloadImg(imgId) {
-      const downloadUrl = await this.dowloadPhoto(imgId)
+      const downloadUrl = await this.dowloadPhoto(imgId);
       location.assign(downloadUrl);
+    },
+    goToPhoto(imgId) {
+      this.$router.push(`/photo/${imgId}`)
     }
   }
 };

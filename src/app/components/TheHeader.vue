@@ -3,7 +3,7 @@
     id="header-wrapper"
     ref="headerWrapper"
     class="header-wrapper"
-    :class="{ 'header-favorites': onFavorites, 'active-padding': sticky && !onFavorites , 'active-padding__photo': sticky && onPhoto }"
+    :class="{ 'header-favorites': onFavorites || onPhoto, 'active-padding': sticky && !onFavorites, 'active-padding__photo': sticky && onPhoto }"
   >
     <b-container
       ref="headerContainer"
@@ -15,7 +15,7 @@
       />
       <div
         class="header-container__wrapper"
-        :class="{ 'header-container__wrapper-favorites': onFavorites }"
+        :class="{ 'header-container__wrapper-favorites': onFavorites || onPhoto }"
       >
         <Search />
         <History />
@@ -87,8 +87,8 @@ export default {
         this.invertHistoryStatus(false);
       } else if(this.$route.params.imgId){
         this.onPhoto = true
-        this.onFavorites = true;
-        this.sticky = false;
+        this.onFavorites = false;
+        this.sticky = true;
         this.invertSearchStatus(false);
         this.invertHistoryStatus(false);
       }
@@ -124,7 +124,7 @@ export default {
         if (window.pageYOffset <= 40) {
           this.sticky = false;
         }
-      } else if(this.$route.params.imgId) {
+      } else if((this.$route.params.imgId && this.getHeaderSearch) || (this.$route.params.imgId && this.getHeaderHistory)) {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
         }
@@ -173,6 +173,6 @@ export default {
   padding-top: 120px !important;
 }
 .active-padding__photo {
-  padding-top: 141px !important;
+  padding-top: 80px !important;
 }
 </style>

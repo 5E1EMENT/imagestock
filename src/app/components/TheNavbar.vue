@@ -30,7 +30,7 @@
           <ul class="navbar-nav__list">
             <li
               class="navbar-nav__item search-nav"
-              :class="{ 'nav-active': getHeaderSearch }"
+              :class="{ 'nav-active': getHeaderSearch}"
               @click="showSearch"
             >
               <img
@@ -89,9 +89,8 @@ export default {
     /**
      * Getter allows to get current search component status
      */
-    ...mapGetters(["getHeaderSearch", "getHeaderHistory"])
+    ...mapGetters(["getHeaderSearch", "getHeaderHistory"]),
   },
-  mounted() {},
   methods: {
     /**
      * Action allwos to inver search component status
@@ -245,9 +244,10 @@ export default {
     }
   }
 }
-.search-unactive {
-  opacity: 0;
-  visibility: hidden;
+.search-nav {
+  opacity: 1;
+  visibility: visible;
+  transition: 0.3s all ease-in;
 }
 .nav-active {
   &::after {
