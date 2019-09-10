@@ -1,20 +1,16 @@
 <template>
-  <div id="app">
-    <Header />
-    <router-view />
+  <div>
+    <Photos />
   </div>
 </template>
 <script>
 import Header from "@/app/components/TheHeader";
-
+import Photos from "./components/HomePagePhotos";
 export default {
   components: {
-    Header
+    Photos
   }
 };
 </script>
-<style lang="scss" type="text/scss">
-#app {
-  overflow: hidden;
-}
+<style scoped>
 </style>
