@@ -44,12 +44,21 @@
             </a>
           </div>
         </div>
-        <img
-          v-if="!loading"
-          :src="currentPhotoRegular"
-          alt="Photo"
-          class="photo-img"
-        >
+        <div class="photo-wrapper__container">
+          <img
+            src="@/app/assets/photo/photo-maximaze-full.svg"
+            alt="Full photo"
+            class="photo-img__maximaze"
+            @click="showFullPhoto"
+          >
+          <img
+            v-if="!loading"
+            :src="currentPhotoRegular"
+            alt="Photo"
+            class="photo-img"
+          >
+        </div>
+
         <div class="photo-same">
           <h4 class="photo-same__title">
             Похожие теги
@@ -90,11 +99,12 @@ export default {
     imgId: "",
     imgTags: [],
     currentPhotoRegular: "",
-    currentPhotoSmall: '',
+    currentPhotoSmall: "",
     username: "",
     userInsta: "",
     userPhoto: "",
     downloadLink: "",
+    fullPhotoLink: '',
     loading: true
   }),
   watch: {
@@ -106,9 +116,9 @@ export default {
       this.startComponent();
     }
   },
-  
+
   async mounted() {
-    this.startComponent()
+    this.startComponent();
   },
   methods: {
     ...mapActions(["getCurrentImg", "dowloadPhoto", "updateLocalStorage"]),
@@ -124,29 +134,37 @@ export default {
       await this.updateLocalStorage(localStorage.getItem("favorites"));
     },
     /**
-   * Method loads all info about current image
-   */
+     * Method redirects to the full photo link
+     */
+    showFullPhoto() {
+      location.assign(this.fullPhotoLink);
+    },
+    /**
+     * Method loads all info about current image
+     */
     async startComponent() {
       this.imgId = this.$route.params.imgId;
-    const photoLoaded = await this.getCurrentImg(this.imgId);
-    this.downloadLink = await this.dowloadPhoto(this.imgId);
-    this.imgTags = photoLoaded.tags.slice(0, 5);
-    this.currentPhotoSmall = photoLoaded.urls.small;
-    this.currentPhotoRegular = photoLoaded.urls.regular;
-    this.username = photoLoaded.user.username;
-    this.userInsta = photoLoaded.user.instagram_username;
-    this.userPhoto = photoLoaded.user.profile_image.medium;
-    this.loading = false;
+      const photoLoaded = await this.getCurrentImg(this.imgId);
+      this.downloadLink = await this.dowloadPhoto(this.imgId);
+      this.imgTags = photoLoaded.tags.slice(0, 5);
+      this.currentPhotoSmall = photoLoaded.urls.small;
+      this.currentPhotoRegular = photoLoaded.urls.regular;
+      this.username = photoLoaded.user.username;
+      this.userInsta = photoLoaded.user.instagram_username;
+      this.userPhoto = photoLoaded.user.profile_image.medium;
+      this.fullPhotoLink = photoLoaded.urls.full
+      this.loading = false;
     }
-  },
-  
+  }
 };
 </script>
 <style lang="scss" scoped>
 .photo {
   &-wrapper {
-    background-color: #fff;
     position: relative;
+    &__container {
+      position: relative;
+    }
     &__image {
       background-size: 100%;
       background-repeat: no-repeat;
@@ -167,6 +185,19 @@ export default {
     margin: 0 auto;
     filter: drop-shadow(12px 12px 12px rgba(0, 0, 0, 0.4));
     border-radius: 8px;
+    &__maximaze {
+      position: absolute;
+      right: 110px;
+      bottom: 65px;
+      z-index: 111;
+      &:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+      &:active {
+        transform: scale(1.15);
+      }
+    }
   }
   &-actions {
     &__item {
