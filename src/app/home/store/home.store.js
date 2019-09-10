@@ -42,7 +42,7 @@ export default {
       
       try {
         let randPage = Math.floor(
-          state.min + Math.random() * (state.max + 200 + 1 - state.min)
+          state.min + Math.random() * (state.max + 1 - state.min)
         );
         const photosCollection = await this._vm.$unsplash.search.photos(collection, randPage, 25 )
         const photosArr = await photosCollection.json();
