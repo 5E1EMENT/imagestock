@@ -13,7 +13,7 @@
 <script>
 import Masonry from "@/app/components/TheMasonry.vue";
 import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
-import Loader from '@/app/components/TheLoader.vue';
+import Loader from "@/app/components/TheLoader.vue";
 
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
@@ -36,6 +36,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/scss/main.scss";
 .photos {
   &-buttons {
     display: flex;
@@ -44,6 +45,12 @@ export default {
     list-style-type: none;
     margin: 0;
     margin-bottom: 72px;
+    @include tablets-small-up {
+      margin-bottom: 40px;
+    }
+    @include phones {
+      margin-bottom: 30px;
+    }
     &__item {
       margin: 0 10px;
     }
@@ -51,6 +58,12 @@ export default {
   &-wrapper {
     background-color: #fff;
     padding: 77px 0;
+    @include tablets-small-up {
+      padding-top: 40px;
+    }
+    @include phones {
+      padding-top: 30px;
+    }
   }
   &-container {
     max-width: 1478px;
@@ -77,5 +90,4 @@ export default {
     filter: invert(100%);
   }
 }
-
 </style>

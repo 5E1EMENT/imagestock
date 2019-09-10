@@ -5,7 +5,7 @@
 </template>
 <script>
 import Header from "@/app/components/TheHeader";
-import Photos from './components/HomePagePhotos'
+import Photos from "./components/HomePagePhotos";
 export default {
   components: {
     Photos

@@ -9,7 +9,11 @@
       class="navbar"
       align-h="between"
     >
-      <b-col cols="3">
+      <b-col
+        cols="4"
+        md="5"
+        sm="5"
+      >
         <router-link
           tag="a"
           to="/home"
@@ -25,7 +29,14 @@
           </div>
         </router-link>
       </b-col>
-      <b-col cols="4">
+      <b-col
+        cols="8"
+        sm="7"
+        md="6"
+        lg="5"
+        xl="4"
+        class="navbar-column"
+      >
         <nav class="navbar-nav">
           <ul class="navbar-nav__list">
             <li
@@ -89,7 +100,7 @@ export default {
     /**
      * Getter allows to get current search component status
      */
-    ...mapGetters(["getHeaderSearch", "getHeaderHistory"]),
+    ...mapGetters(["getHeaderSearch", "getHeaderHistory"])
   },
   methods: {
     /**
@@ -109,7 +120,7 @@ export default {
         this.invertSearchStatus(true);
         this.invertHistoryStatus(false);
       }
-       /** Smooth scroll to the top */
+      /** Smooth scroll to the top */
       easyScroll({
         scrollableDomEle: window,
         direction: "top",
@@ -141,6 +152,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/scss/main.scss";
 .navbar {
   max-width: 1478px;
   width: 100%;
@@ -153,6 +165,9 @@ export default {
     z-index: 999;
     background: #000;
     padding: 25px 0;
+    @include desktop {
+      position: fixed;
+    }
   }
   &-link {
     text-decoration: none;
@@ -166,12 +181,29 @@ export default {
       width: 28px;
       height: 28px;
       vertical-align: bottom;
+      @include tablets-large {
+        width: 22px;
+        height: 22px;
+      }
     }
     &__title {
       font-family: SF UI Display Semibold;
       font-size: 24px;
       line-height: 29px;
       margin-left: 24px;
+      @include tablets-large {
+        font-size: 16px;
+        line-height: 1;
+        margin-left: 15px;
+      }
+      @include tablets-small-up {
+        display: none;
+      }
+    }
+  }
+  &-column {
+    @include tablets-small-up {
+      max-width: 120px;
     }
   }
   &-nav {
@@ -207,6 +239,12 @@ export default {
         font-size: 18px;
         font-family: SF UI Display Light;
         color: #fff;
+        @include tablets-large {
+          font-size: 12px;
+        }
+        @include tablets-small-up {
+          display: none;
+        }
       }
       &:hover {
         &::after {
@@ -220,6 +258,9 @@ export default {
           right: 0;
           opacity: 1;
           transition: all 0.3s ease;
+          @include tablets-small-up {
+            display: none;
+          }
         }
       }
       &::after {
@@ -233,6 +274,9 @@ export default {
         bottom: -10px;
         right: -10px;
         transition: all 0.3s ease;
+        @include tablets-small-up {
+          display: none;
+        }
       }
     }
   }
@@ -261,6 +305,9 @@ export default {
     right: 0;
     opacity: 1;
     transition: all 0.3s ease;
+    @include tablets-small-up {
+      display: none;
+    }
   }
 }
 </style>

@@ -39,38 +39,36 @@ import { mapGetters } from "vuex";
 import { eventBus } from "@/main.js";
 import _ from "lodash";
 export default {
-
   data: () => ({
-    items: [],
+    items: []
   }),
   computed: {
     ...mapGetters(["getHistory", "getHeaderHistory"])
   },
-  
+
   watch: {
     /**
-   * When history comonent loads
-   * run start component
-   */
+     * When history comonent loads
+     * run start component
+     */
     getHeaderHistory() {
-      this.startComponent()
+      this.startComponent();
     }
   },
   /**
    * Starts start component
    */
   mounted() {
-    this.startComponent()
+    this.startComponent();
   },
   methods: {
     /**
-   * Method gets history array items
-   */
+     * Method gets history array items
+     */
     startComponent() {
       this.items = _.uniq(JSON.parse(this.getHistory));
     }
-  },
-  
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -109,7 +107,7 @@ export default {
     text-align: center;
     font-family: SF UI Display light;
     color: #fff;
-   font-size: 18px;
+    font-size: 18px;
   }
   &-active {
     opacity: 1;

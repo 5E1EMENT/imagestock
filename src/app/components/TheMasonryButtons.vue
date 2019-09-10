@@ -20,9 +20,9 @@
   </ul>
 </template>
 <style lang="scss" scoped>
-
+@import "@/scss/main.scss";
 .photos {
-    &-buttons {
+  &-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,6 +31,9 @@
     margin-bottom: 72px;
     &__item {
       margin: 0 10px;
+    }
+    @include tablets-small-up {
+      margin-bottom: 35px;
     }
   }
 }

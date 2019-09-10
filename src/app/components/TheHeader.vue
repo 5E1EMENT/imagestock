@@ -75,7 +75,7 @@ export default {
      */
     startComponent() {
       if (this.$route.path === "/favorites") {
-        this.onPhoto = false
+        this.onPhoto = false;
         this.onFavorites = true;
         this.sticky = true;
         this.invertSearchStatus(false);
@@ -85,14 +85,13 @@ export default {
         this.sticky = false;
         this.invertSearchStatus(true);
         this.invertHistoryStatus(false);
-      } else if(this.$route.params.imgId){
-        this.onPhoto = true
+      } else if (this.$route.params.imgId) {
+        this.onPhoto = true;
         this.onFavorites = false;
         this.sticky = true;
         this.invertSearchStatus(false);
         this.invertHistoryStatus(false);
       }
-      
     },
     /**
      * Method allows to correct display
@@ -107,7 +106,7 @@ export default {
       // Get the offset position of the navbar
       let sticky = navbar.offsetTop ? navbar.offsetTop : 0;
       //If current route is home
-      
+
       if (this.$route.path === "/home") {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
@@ -116,7 +115,8 @@ export default {
           this.sticky = false;
         }
       } else if (
-        (this.$route.path === "/favorites" && this.getHeaderSearch) || (this.$route.path === "/favorites" && this.getHeaderHistory)
+        (this.$route.path === "/favorites" && this.getHeaderSearch) ||
+        (this.$route.path === "/favorites" && this.getHeaderHistory)
       ) {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
@@ -124,7 +124,10 @@ export default {
         if (window.pageYOffset <= 40) {
           this.sticky = false;
         }
-      } else if((this.$route.params.imgId && this.getHeaderSearch) || (this.$route.params.imgId && this.getHeaderHistory)) {
+      } else if (
+        (this.$route.params.imgId && this.getHeaderSearch) ||
+        (this.$route.params.imgId && this.getHeaderHistory)
+      ) {
         if (window.pageYOffset >= sticky) {
           this.sticky = true;
         }
@@ -138,6 +141,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/scss/main.scss";
 .header {
   &-wrapper {
     background-color: #000;
@@ -145,6 +149,11 @@ export default {
     padding-top: 40px;
     padding-bottom: 90px;
     height: 369px;
+    @include desktop {
+      padding-top: 80px;
+      padding-bottom: 0;
+      height: auto;
+    }
   }
   &-container {
     max-width: 1478px;
@@ -156,11 +165,15 @@ export default {
       transition: 0.3s all ease-in;
       display: block;
       opacity: 1;
+
       &-favorites {
         display: none;
       }
       &-favorites--hidden {
         opacity: 0;
+      }
+      @include desktop {
+        height: 180px;
       }
     }
   }
@@ -171,8 +184,11 @@ export default {
 }
 .active-padding {
   padding-top: 120px !important;
-}
-.active-padding__photo {
-  padding-top: 80px !important;
+  @include desktop {
+    padding-top: 80px !important;
+  }
+  @include horizontal-mobile {
+    padding-top: 76px !important;
+  }
 }
 </style>
