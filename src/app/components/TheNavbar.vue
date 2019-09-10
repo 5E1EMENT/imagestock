@@ -9,7 +9,10 @@
       class="navbar"
       align-h="between"
     >
-      <b-col cols="3">
+      <b-col
+        cols="3"
+        md="6"
+      >
         <router-link
           tag="a"
           to="/home"
@@ -25,7 +28,12 @@
           </div>
         </router-link>
       </b-col>
-      <b-col cols="4">
+      <b-col
+        cols="4"
+        md="6"
+        lg="5"
+        xl="4"
+      >
         <nav class="navbar-nav">
           <ul class="navbar-nav__list">
             <li

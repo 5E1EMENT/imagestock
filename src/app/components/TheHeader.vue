@@ -138,6 +138,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/scss/main.scss";
 .header {
   &-wrapper {
     background-color: #000;
@@ -145,6 +146,10 @@ export default {
     padding-top: 40px;
     padding-bottom: 90px;
     height: 369px;
+    @include desktop {
+     padding: 0;
+     height: auto;
+	}
   }
   &-container {
     max-width: 1478px;
@@ -156,12 +161,16 @@ export default {
       transition: 0.3s all ease-in;
       display: block;
       opacity: 1;
+      
       &-favorites {
         display: none;
       }
       &-favorites--hidden {
         opacity: 0;
       }
+      @include desktop {
+     height: 180px;
+	}
     }
   }
   &-favorites {

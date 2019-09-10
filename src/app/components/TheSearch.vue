@@ -17,7 +17,9 @@
         </b-col>
       </b-row>
       <b-row class="search-row">
-        <b-col class="search-wrapper">
+        <b-col
+          class="search-wrapper"
+        >
           <ul class="search-list">
             <li
               v-for="item of items"
@@ -95,6 +97,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  @import "@/scss/main.scss";
 /* Placeholder color */
 ::-webkit-input-placeholder {
   color: #fff;
@@ -127,6 +130,9 @@ export default {
   }
   &-row {
     overflow-x: visible;
+    @include desktop {
+    padding: 0 20px;
+	}
   }
   &-input {
     width: 100%;
@@ -180,6 +186,9 @@ export default {
       -moz-box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
       box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
       right: 0;
+      @include desktop {
+    right: -20px;
+	}
     }
   }
   &-list {
