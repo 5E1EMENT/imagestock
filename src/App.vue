@@ -11,7 +11,10 @@ export default {
   components: {
     Header
   }
-}
+};
 </script>
-<style lang="scss" src="@/scss/main.scss" type="text/scss">
+<style lang="scss" type="text/scss">
+#app {
+  overflow: hidden;
+}
 </style>

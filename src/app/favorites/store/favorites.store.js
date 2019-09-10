@@ -3,10 +3,22 @@ export default {
     favorites: localStorage.getItem("favorites")
   },
   getters: {
-    getFavorites: s => s.favorites,
+    /**
+     * Getter allows to get favorites
+     * @param s vuex state
+     * @returns {Array} array of favorite images
+     */
+    getFavorites: s => s.favorites
   },
   mutations: {
-    setFavoritesLocalStorage: (state, favorites) => (state.favorites = favorites),
+    /**
+     * Mutation sets new favorites img arr
+     * @param state vuex state
+     * @param favorites favorites
+     * @returns {Array} array of favorite images
+     */
+    setFavoritesLocalStorage: (state, favorites) =>
+      (state.favorites = favorites)
   },
   actions: {
     /**
@@ -30,9 +42,9 @@ export default {
           })
         );
 
-        return resultFavoritesArr ? resultFavoritesArr: []  ;
+        return resultFavoritesArr ? resultFavoritesArr : [];
       } catch (error) {
-        throw new error();
+        throw new error("Action error: getFavoritesImg");
       }
     },
     /**
@@ -42,7 +54,11 @@ export default {
      * @param {Array} favorites array of images from localstorage
      */
     updateLocalStorage({ commit }, favorites) {
-      commit("setFavoritesLocalStorage", favorites);
-    },
+      try {
+        commit("setFavoritesLocalStorage", favorites);
+      } catch (error) {
+        throw new error("Action error: updateLocalStorage");
+      }
+    }
   }
 };

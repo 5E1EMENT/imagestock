@@ -13,7 +13,7 @@
 <script>
 import Masonry from "@/app/components/TheMasonry.vue";
 import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
-import Loader from '@/app/components/TheLoader.vue';
+import Loader from "@/app/components/TheLoader.vue";
 
 import { setTimeout } from "timers";
 import { mapActions } from "vuex";
@@ -90,5 +90,4 @@ export default {
     filter: invert(100%);
   }
 }
-
 </style>

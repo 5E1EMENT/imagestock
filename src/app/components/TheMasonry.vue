@@ -97,18 +97,18 @@
           </div>
         </div>
       </li>
-    </ul>
-    <a
-      v-if="loaded && !images || isOnPhoto"
-      class="masonry-top"
-      @click="scrollTop"
-    >
-      <img
-        src="@/app/assets/photos/photos-btn__top.svg"
-        alt="up"
-        class="photos-button masonry-up"
+      <a
+        v-if="loaded && images && isOnHome || isOnPhoto || isOnFavorites && loaded"
+        class="masonry-top"
+        @click="scrollTop"
       >
-    </a>
+        <img
+          src="@/app/assets/photos/photos-btn__top.svg"
+          alt="up"
+          class="photos-button masonry-up"
+        >
+      </a>
+    </ul>
   </div>
 </template>
 <script>
@@ -134,6 +134,18 @@ export default {
      */
     isOnPhoto() {
       return this.$route.params.imgId;
+    },
+    /**
+     * Check if current page is home page
+     */
+    isOnHome() {
+      return this.$route.path === "/home";
+    },
+    /**
+     * Check if current page is home page
+     */
+    isOnFavorites() {
+      return this.$route.path === "/favorites";
     }
   },
   /**
@@ -184,6 +196,9 @@ export default {
         this.images = collection;
       });
     },
+    /**
+     * Function loads similar images
+     */
     async getSimilar() {
       const imgId = this.$route.params.imgId;
       this.images = await this.getSimilarImg(imgId);
@@ -194,7 +209,7 @@ export default {
      * Load images  when the page scroll goes to the end
      */
     loadImg() {
-      if (this.loadImages) {
+      if (this.loadImages && this.isOnHome) {
         this.loadImages = false;
         const imagesArr = this.$store
           .dispatch("getCollection", this.getSearchCollection)
@@ -212,7 +227,7 @@ export default {
       const viewportHeight = window.innerHeight;
       const totalHeight = document.documentElement.offsetHeight;
       const atTheBottom = scrollTop + viewportHeight >= totalHeight;
-      if (atTheBottom) {
+      if (atTheBottom && this.isOnHome) {
         this.loadImages = true;
         this.loadImg();
       }
@@ -253,6 +268,9 @@ export default {
       localStorage.setItem("favorites", JSON.stringify(favoritesArr));
       await this.updateLocalStorage(localStorage.getItem("favorites"));
     },
+    /**
+     * Function allows to scroll to the top
+     */
     scrollTop() {
       /** Smooth scroll to the top */
       easyScroll({
@@ -269,8 +287,12 @@ export default {
       const downloadUrl = await this.dowloadPhoto(imgId);
       location.assign(downloadUrl);
     },
+    /**
+     * Function allows to redirect user to current photo
+     * @param {String} imgId image id
+     */
     goToPhoto(imgId) {
-      this.$router.push(`/photo/${imgId}`)
+      this.$router.push(`/photo/${imgId}`);
     }
   }
 };
@@ -287,6 +309,10 @@ export default {
     position: absolute;
     right: -50px;
     bottom: 0;
+    @include tablets {
+      right: 10px;
+      bottom: -60px;
+    }
   }
   &-item {
     max-width: 456px;
@@ -303,36 +329,35 @@ export default {
       }
     }
     @include wrapper {
-     max-width: 380px;
-  }
+      max-width: 380px;
+    }
     @include desktop-large {
-     max-width: 340px;
-  }
-  @include desktop {
-     max-width: 300px;
-  }
-  @include tablets-large {
-     max-width: 350px;
-  }
-  @include tablets {
-     max-width: 250px;
-  }
-  @include tablets-small {
-     max-width: 450px;
-  }
-  @include horizontal-mobile {
-     max-width: auto;
-	}
-   @include phones {
-     max-width: 380px;
-  }
-   @include phones-min {
-     max-width: 350px;
-  }
-   @include iphone {
-     max-width: 290px;
-  }
-  
+      max-width: 340px;
+    }
+    @include desktop {
+      max-width: 300px;
+    }
+    @include tablets-large {
+      max-width: 350px;
+    }
+    @include tablets {
+      max-width: 250px;
+    }
+    @include tablets-small {
+      max-width: 450px;
+    }
+    @include horizontal-mobile {
+      max-width: auto;
+    }
+    @include phones {
+      max-width: 380px;
+    }
+    @include phones-min {
+      max-width: 320px;
+    }
+    @include iphone {
+      max-width: 290px;
+    }
   }
   &-image {
     width: 100%;
@@ -343,10 +368,10 @@ export default {
       border-radius: 8px;
       border: 1px solid #fff;
       box-sizing: border-box;
-    @include desktop-large {
-     width: 50px;
-      height: 50px;
-  }
+      @include desktop-large {
+        width: 50px;
+        height: 50px;
+      }
     }
     &__data {
       display: none;
@@ -363,16 +388,16 @@ export default {
       font-size: 30px;
       line-height: 36px;
       @include phones {
-     font-size: 25px;
-  }
+        font-size: 25px;
+      }
     }
     &__instagram {
       font-family: SF UI Display Light;
       color: #fff;
       font-size: 18px;
       @include phones {
-     font-size: 15px;
-  }
+        font-size: 15px;
+      }
     }
   }
   &-logos {
@@ -382,19 +407,19 @@ export default {
     width: 100%;
     justify-content: space-between;
     @include desktop-large {
-        max-width: 120px;
-      }
-      @include desktop {
-        max-width: 150px;
-        margin-top: 20px;
-      }
-      @include tablets-small-up {
-        max-width: 200px;
-        margin-top: 30px;
-      }
-      @include phones {
-     max-width: 140px;
-  }
+      max-width: 120px;
+    }
+    @include desktop {
+      max-width: 150px;
+      margin-top: 20px;
+    }
+    @include tablets-small-up {
+      max-width: 200px;
+      margin-top: 30px;
+    }
+    @include phones {
+      max-width: 140px;
+    }
     &__item {
       @include desktop-large {
         width: 25px;
@@ -413,9 +438,9 @@ export default {
         height: 35px;
       }
       @include phones {
-     width: 25px;
+        width: 25px;
         height: 25px;
-  }
+      }
       &:hover {
         transform: scale(1.4);
       }

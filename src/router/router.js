@@ -7,9 +7,5 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
-  routes: [
-    ...home,
-    ...favorites,
-    ...photo
-  ]
+  routes: [...home, ...favorites, ...photo]
 });

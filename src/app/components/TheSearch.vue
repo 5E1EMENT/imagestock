@@ -17,9 +17,7 @@
         </b-col>
       </b-row>
       <b-row class="search-row">
-        <b-col
-          class="search-wrapper"
-        >
+        <b-col class="search-wrapper">
           <ul class="search-list">
             <li
               v-for="item of items"
@@ -73,15 +71,14 @@ export default {
      * @param item Name of collection
      */
     async getCollection(item) {
-      if(this.$route.path === '/favorites' || this.$route.params.imgId) {
-        this.$router.push('/home')
+      if (this.$route.path === "/favorites" || this.$route.params.imgId) {
+        this.$router.push("/home");
       }
       this.$refs.search.blur();
       this.searchItem = item;
       const collectionArr = await this.$store.dispatch("getCollection", item);
       eventBus.$emit("collection", collectionArr);
       await this.setCollection(item);
-      
     },
     /**
      * Method allows to add current search item to localstorage
@@ -97,7 +94,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  @import "@/scss/main.scss";
+@import "@/scss/main.scss";
 /* Placeholder color */
 ::-webkit-input-placeholder {
   color: #fff;
@@ -131,8 +128,8 @@ export default {
   &-row {
     overflow-x: visible;
     @include desktop {
-    padding: 0 20px;
-	}
+      padding: 0 20px;
+    }
   }
   &-input {
     width: 100%;
@@ -156,9 +153,9 @@ export default {
       background: #fff;
     }
     @include tablets-large {
-     font-size: 56px;
-     padding-bottom: 20px;
-  }
+      font-size: 56px;
+      padding-bottom: 20px;
+    }
   }
   &-wrapper {
     padding: 0;
@@ -191,8 +188,8 @@ export default {
       box-shadow: inset -45px 0px 30px 0px rgba(0, 0, 0, 0.86);
       right: 0;
       @include desktop {
-    right: -20px;
-	}
+        right: -20px;
+      }
     }
   }
   &-list {
@@ -232,18 +229,18 @@ export default {
   width: 60px;
   @include desktop {
     width: 270px;
-	}
+  }
   @include tablets-large {
     width: 470px;
-	}
+  }
   @include tablets {
     width: 670px;
-	}
+  }
   @include tablets-small-up {
     width: 870px;
   }
   @include phones {
     width: 1000px;
-	}
+  }
 }
 </style>

@@ -166,8 +166,8 @@ export default {
     background: #000;
     padding: 25px 0;
     @include desktop {
-     position: fixed;
-  }
+      position: fixed;
+    }
   }
   &-link {
     text-decoration: none;
@@ -203,8 +203,8 @@ export default {
   }
   &-column {
     @include tablets-small-up {
-       max-width: 120px;
-      }
+      max-width: 120px;
+    }
   }
   &-nav {
     &__list {
@@ -228,13 +228,11 @@ export default {
         width: 23px;
         height: 21px;
         vertical-align: sub;
-        
       }
       &-history {
         width: 20px;
         height: 22px;
         vertical-align: sub;
-       
       }
       &-text {
         margin-left: 10px;

@@ -11,7 +11,7 @@
         >
           Избранное
         </h1>
-        
+
         <MasonryButtons v-if="favorites && !getHeaderSearch && !getHeaderHistory" />
         <Loader v-if="loading && getFavorites" />
         <p
@@ -28,10 +28,10 @@
 <script>
 import Masonry from "@/app/components/TheMasonry.vue";
 import MasonryButtons from "@/app/components/TheMasonryButtons.vue";
-import Loader from '@/app/components/TheLoader.vue';
-import Navbar from '@/app/components/TheNavbar.vue'
-import Search from '@/app/components/TheSearch.vue'
-import History from '@/app/components/TheHistory.vue'
+import Loader from "@/app/components/TheLoader.vue";
+import Navbar from "@/app/components/TheNavbar.vue";
+import Search from "@/app/components/TheSearch.vue";
+import History from "@/app/components/TheHistory.vue";
 import { eventBus } from "@/main.js";
 
 import { mapActions, mapGetters } from "vuex";
@@ -40,8 +40,7 @@ export default {
   components: {
     Masonry,
     MasonryButtons,
-    Loader,
-
+    Loader
   },
   data: () => ({
     loading: true,
@@ -49,37 +48,37 @@ export default {
     showSearch: false
   }),
   computed: {
-      ...mapGetters(['getFavorites',"getHeaderSearch", "getHeaderHistory"]),
+    ...mapGetters(["getFavorites", "getHeaderSearch", "getHeaderHistory"])
   },
   mounted() {
-      eventBus.$on("collection", collection => {
-        this.favorites = false;
-      });
+    eventBus.$on("collection", collection => {
+      this.favorites = false;
+    });
   },
   methods: {
     /**
-     * Method get's the value from masonry component 
+     * Method get's the value from masonry component
      * when masonry data is loaded
      * @param value boolean
      */
     invertLoader(value) {
-      this.loading = value
+      this.loading = value;
     },
     /**
-     * Method get's the value from masonry component 
+     * Method get's the value from masonry component
      * when masonry data is loaded
      * @param value boolean
      */
     showHistoryFavorites(value) {
-      this.favoritesHistory = value
+      this.favoritesHistory = value;
     },
     /**
-     * Method get's the value from masonry component 
+     * Method get's the value from masonry component
      * when masonry data is loaded
      * @param value boolean
      */
     showSearchFavorites(value) {
-      this.favoritesSearch = value
+      this.favoritesSearch = value;
     }
   }
 };
@@ -91,12 +90,6 @@ export default {
     background-color: #fff;
     padding: 77px 0;
     padding-top: 110px;
-    @include tablets-small-up {
-     padding-top: 40px;
-    }
-    @include phones {
-      padding-top: 30px;
-    }
   }
   &-container {
     max-width: 1478px;
@@ -108,6 +101,9 @@ export default {
     color: #000;
     font-size: 72px;
     line-height: 86px;
+    @include tablets-small-up {
+      display: none;
+    }
   }
   &-empty {
     text-align: center;

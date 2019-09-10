@@ -37,8 +37,15 @@
             >
             <a :href="downloadLink">
               <img
+                v-if="!isMobile"
                 class="photo-actions__item"
                 src="@/app/assets/photo/photo-download-full.svg"
+                alt="photo-downoad"
+              >
+              <img
+                v-else
+                class="photo-actions__item"
+                src="@/app/assets/photo/photo-download-adaptive.svg"
                 alt="photo-downoad"
               >
             </a>
@@ -46,6 +53,7 @@
         </div>
         <div class="photo-wrapper__container">
           <img
+            v-if="!loading"
             src="@/app/assets/photo/photo-maximaze-full.svg"
             alt="Full photo"
             class="photo-img__maximaze"
@@ -60,10 +68,16 @@
         </div>
 
         <div class="photo-same">
-          <h4 class="photo-same__title">
+          <h4
+            v-if="!loading"
+            class="photo-same__title"
+          >
             Похожие теги
           </h4>
-          <ul class="photo-same__list">
+          <ul
+            v-if="!loading"
+            class="photo-same__list"
+          >
             <li
               v-for="(tag, index) of imgTags"
               :key="index"
@@ -77,7 +91,10 @@
     </div>
     <div class="photo-wrapper photo-wrapper__images">
       <b-container class="photo-container">
-        <h1 class="photo-similar">
+        <h1
+          v-if="!loading"
+          class="photo-similar"
+        >
           Похожие фотографии
         </h1>
         <Masonry />
@@ -104,9 +121,17 @@ export default {
     userInsta: "",
     userPhoto: "",
     downloadLink: "",
-    fullPhotoLink: '',
+    fullPhotoLink: "",
     loading: true
   }),
+  computed: {
+    /**
+     * Method check if this screen is  mobile
+     */
+    isMobile() {
+      return document.body.clientWidth <= 650;
+    }
+  },
   watch: {
     /**
      * When route changes,
@@ -116,7 +141,6 @@ export default {
       this.startComponent();
     }
   },
-
   async mounted() {
     this.startComponent();
   },
@@ -127,7 +151,6 @@ export default {
      * @param imgId id of current image
      */
     async addToFavorite(imgId) {
-      console.log(1);
       let favoritesArr = JSON.parse(localStorage.getItem("favorites")) || [];
       favoritesArr.push(imgId);
       localStorage.setItem("favorites", JSON.stringify(favoritesArr));
@@ -152,13 +175,14 @@ export default {
       this.username = photoLoaded.user.username;
       this.userInsta = photoLoaded.user.instagram_username;
       this.userPhoto = photoLoaded.user.profile_image.medium;
-      this.fullPhotoLink = photoLoaded.urls.full
+      this.fullPhotoLink = photoLoaded.urls.full;
       this.loading = false;
     }
   }
 };
 </script>
 <style lang="scss" scoped>
+@import "@/scss/main.scss";
 .photo {
   &-wrapper {
     position: relative;
@@ -169,9 +193,15 @@ export default {
       background-size: 100%;
       background-repeat: no-repeat;
       // filter: blur(5px);
+      @include desktop-large {
+        background-image: none !important;
+      }
     }
     &__images {
       margin: 70px 0;
+      @include desktop-large {
+        margin: 0;
+      }
     }
   }
   &-container {
@@ -196,6 +226,14 @@ export default {
       }
       &:active {
         transform: scale(1.15);
+      }
+      @include tablets-large {
+        right: 50px;
+        bottom: 40px;
+      }
+      @include tablets-small {
+        right: 25px;
+        bottom: 20px;
       }
     }
   }
@@ -230,16 +268,25 @@ export default {
       color: #fff;
       font-size: 30px;
       line-height: 36px;
+      @include wrapper {
+        color: #000;
+      }
     }
     &__instagram {
       font-family: SF UI Display Light;
       color: #fff;
       font-size: 18px;
       line-height: 1;
+      @include wrapper {
+        color: #828282;
+      }
     }
   }
   &-same {
     padding-bottom: 63px;
+    @include wrapper {
+      padding-bottom: 30px;
+    }
     &__title {
       margin-top: 40px;
       color: #fff;
@@ -247,11 +294,17 @@ export default {
       font-family: SF UI Display Semibold;
       font-size: 24px;
       line-height: 29px;
+      @include wrapper {
+        color: #000;
+      }
     }
     &__list {
-      margin-top: 20px;
       display: flex;
       justify-content: center;
+      @include tablets-small-up {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
     }
     &__item {
       font-family: SF UI Display Light;
@@ -260,20 +313,35 @@ export default {
       color: #828282;
       padding: 5px 10px;
       margin: 0 15px;
+      margin-top: 20px;
       background: #fff;
       border-radius: 5px;
+      @include wrapper {
+        background: #f2f2f2;
+        color: #828282;
+      }
     }
   }
   &-similar {
     color: #000;
-    text-align-last: left;
+    text-align: left;
     margin-bottom: 40px;
     font-family: SF UI Display Semibold;
     font-size: 36px;
     line-height: 43px;
+    @include tablets-small-up {
+      text-align: center;
+    }
   }
 }
 .favorite-btn {
   margin-right: 15px;
+  @include tablets-large {
+    width: 50px;
+    height: 50px;
+  }
+  @include phones {
+    margin-right: 5px;
+  }
 }
 </style>

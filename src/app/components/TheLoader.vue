@@ -9,14 +9,14 @@
 </template>
 <style lang="scss" scoped>
 .loader {
-    display: block;
+  display: block;
+  text-align: center;
+  position: relative;
+  margin-top: 50px;
+  img {
     text-align: center;
-    position: relative;
-    margin-top: 50px;
-    img {
-      text-align: center;
-      animation: spin 2s linear infinite;
-    }
+    animation: spin 2s linear infinite;
+  }
 }
 
 /* Loader spin animation */
