@@ -1,11 +1,36 @@
+@mixin wrapper {
+	@media screen and (max-width: $wrapper) {
+		@content;
+	}
+}
+@mixin desktop-large {
+	@media screen and (max-width: $desktop-large) {
+		@content;
+	}
+}
 @mixin desktop {
 	@media screen and (max-width: $desktop) {
 		@content;
 	}
 }
 
+@mixin tablets-large {
+	@media screen and (max-width: $tablets-large) {
+		@content;
+	}
+}
 @mixin tablets {
 	@media screen and (max-width: $tablets) {
+		@content;
+	}
+}
+@mixin tablets-small-up {
+	@media screen and (max-width: $tablets-small-up) {
+		@content;
+	}
+}
+@mixin tablets-small {
+	@media screen and (max-width: $tablets-small) {
 		@content;
 	}
 }

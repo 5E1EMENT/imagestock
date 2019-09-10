@@ -275,8 +275,10 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+@import "@/scss/main.scss";
 .masonry {
+  width: 100%;
   &-top {
     &:hover {
       filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.3));
@@ -287,7 +289,7 @@ export default {
     bottom: 0;
   }
   &-item {
-    max-width: 446px;
+    max-width: 456px;
     width: 100%;
     &:hover {
       .masonry-image__data {
@@ -300,6 +302,36 @@ export default {
         filter: blur(4px);
       }
     }
+    @include wrapper {
+     max-width: 380px;
+  }
+    @include desktop-large {
+     max-width: 340px;
+  }
+  @include desktop {
+     max-width: 300px;
+  }
+  @include tablets-large {
+     max-width: 350px;
+  }
+  @include tablets {
+     max-width: 250px;
+  }
+  @include tablets-small {
+     max-width: 450px;
+  }
+   @include phones {
+     max-width: 380px;
+  }
+   @include phones-min {
+     max-width: 350px;
+  }
+   @include iphone {
+     max-width: 290px;
+  }
+  @include horizontal-mobile {
+     max-width: auto;
+	}
   }
   &-image {
     width: 100%;

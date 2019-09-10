@@ -85,7 +85,7 @@ export default {
         this.sticky = false;
         this.invertSearchStatus(true);
         this.invertHistoryStatus(false);
-      } else if(this.$route.params.imgId){
+      } else if (this.$route.params.imgId){
         this.onPhoto = true
         this.onFavorites = false;
         this.sticky = true;
@@ -147,9 +147,11 @@ export default {
     padding-bottom: 90px;
     height: 369px;
     @include desktop {
-     padding: 0;
+     padding-top: 80px;
+     padding-bottom: 0;
      height: auto;
-	}
+  }
+  
   }
   &-container {
     max-width: 1478px;
@@ -180,8 +182,9 @@ export default {
 }
 .active-padding {
   padding-top: 120px !important;
+  @include desktop {
+     padding-top: 80px !important;
+	}
 }
-.active-padding__photo {
-  padding-top: 80px !important;
-}
+
 </style>

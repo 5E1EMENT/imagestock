@@ -155,6 +155,10 @@ export default {
       bottom: 0;
       background: #fff;
     }
+    @include tablets-large {
+     font-size: 56px;
+     padding-bottom: 20px;
+  }
   }
   &-wrapper {
     padding: 0;
@@ -226,5 +230,20 @@ export default {
 }
 .empty {
   width: 60px;
+  @include desktop {
+    width: 270px;
+	}
+  @include tablets-large {
+    width: 470px;
+	}
+  @include tablets {
+    width: 670px;
+	}
+  @include tablets-small-up {
+    width: 870px;
+  }
+  @include phones {
+    width: 1000px;
+	}
 }
 </style>
