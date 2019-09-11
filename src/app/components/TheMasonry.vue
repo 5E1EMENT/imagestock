@@ -1,5 +1,8 @@
 <template>
-  <div class="masonry-wrapper">
+  <div
+    v-if="loaded"
+    class="masonry-wrapper"
+  >
     <ul
       v-masonry
       transition-duration="0"
@@ -130,7 +133,7 @@ export default {
      */
     ...mapGetters(["getFavorites","getSearchCollection", ]),
     favoritesLength() {
-      return Object.keys(JSON.parse(this.getFavorites)).length >= 4
+      return this.getFavorites ? Object.keys(JSON.parse(this.getFavorites)).length >= 4 : 0
     },
     /**
      * Check if current page is photo page
@@ -158,7 +161,6 @@ export default {
    * old images to the new one
    */
   async mounted() {
-    console.log(Object.keys(JSON.parse(this.getFavorites)).length )
     if (this.$route.path === "/home") {
       this.images = await this.getCollection();
       // Delay scroll handle function
@@ -206,7 +208,6 @@ export default {
     async getSimilar() {
       const imgId = this.$route.params.imgId;
       this.images = await this.getSimilarImg(imgId);
-      console.log(this.images);
       this.loaded = true;
     },
     /**
