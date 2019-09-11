@@ -117,6 +117,12 @@ export default {
 ::-webkit-scrollbar {
   width: 0;
 }
+::-moz-scrollbar {
+  width: 0;
+}
+:-ms-scrollbar {
+  width: 0;
+}
 
 .search {
   opacity: 0;
@@ -127,6 +133,22 @@ export default {
   }
   &-row {
     overflow-x: visible;
+    position: relative;
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: -20px;
+      height: 1px;
+      width: 100%;
+      background: rgb(2, 0, 36);
+      background: linear-gradient(
+        90deg,
+        rgba(2, 0, 36, 0) 0%,
+        rgba(255, 255, 255, 1) 49%,
+        rgba(0, 0, 0, 0) 100%
+      );
+    }
     @include desktop {
       padding: 0 20px;
     }
@@ -160,22 +182,7 @@ export default {
   &-wrapper {
     padding: 0;
     position: relative;
-
-    &:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: -20px;
-      height: 1px;
-      width: 100%;
-      background: rgb(2, 0, 36);
-      background: linear-gradient(
-        90deg,
-        rgba(2, 0, 36, 0) 0%,
-        rgba(255, 255, 255, 1) 49%,
-        rgba(0, 0, 0, 0) 100%
-      );
-    }
+    overflow: hidden;
     &::before {
       z-index: 11;
       content: "";
@@ -201,7 +208,7 @@ export default {
     width: 1200px;
     list-style-type: none;
     position: relative;
-
+ -ms-overflow-style: none;
     &__item {
       position: relative;
       margin-left: 20px;
