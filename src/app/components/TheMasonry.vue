@@ -147,7 +147,7 @@ export default {
      * Check if current page is home page
      */
     isOnHome() {
-      return this.$route.path === "/home";
+      return this.$route.path === "/home" || this.$route.params.collectionName;
     },
     /**
      * Check if current page is home page
@@ -234,6 +234,7 @@ export default {
      * Load images  when the page scroll goes to the end
      */
     loadImg() {
+      console.log(this.getSearchCollection)
       if (this.loadImages && this.isOnHome) {
         this.loadImages = false;
         const imagesArr = this.$store
