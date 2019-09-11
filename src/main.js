@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueMeta from 'vue-meta'
 import App from "./App.vue";
 import router from "@/router/router";
 import store from "@/store/store";
@@ -14,7 +15,10 @@ import "@/app/core/specialStyles/masonry.css";
 Vue.config.productionTip = false;
 Vue.use(vueSmoothScroll);
 Vue.use(VueMasonryPlugin);
-
+Vue.use(VueMeta, {
+  // optional pluginOptions
+  refreshOnceOnNavigation: true
+})
 new Vue({
   router,
   store,

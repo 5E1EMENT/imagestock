@@ -9,7 +9,10 @@ import Photos from "./components/HomePagePhotos";
 export default {
   components: {
     Photos
-  }
+  },
+  metaInfo: {
+      title: 'Image Stock'
+    }
 };
 </script>
 <style scoped>

@@ -178,7 +178,10 @@ export default {
       this.fullPhotoLink = photoLoaded.urls.full;
       this.loading = false;
     }
-  }
+  },
+  metaInfo: {
+      title: 'Photo'
+    }
 };
 </script>
 <style lang="scss" scoped>

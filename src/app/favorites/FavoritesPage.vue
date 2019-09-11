@@ -80,7 +80,10 @@ export default {
     showSearchFavorites(value) {
       this.favoritesSearch = value;
     }
-  }
+  },
+  metaInfo: {
+      title: 'Favorites'
+    }
 };
 </script>
 <style lang="scss">
