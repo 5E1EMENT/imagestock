@@ -71,13 +71,9 @@ export default {
      * @param item Name of collection
      */
     async getCollection(item) {
-      if (this.$route.path === "/favorites" || this.$route.params.imgId) {
-        this.$router.push("/home");
-      }
+      this.$router.push(`/home/${item}`);
       this.$refs.search.blur();
       this.searchItem = item;
-      const collectionArr = await this.$store.dispatch("getCollection", item);
-      eventBus.$emit("collection", collectionArr);
       await this.setCollection(item);
     },
     /**

@@ -131,9 +131,11 @@ export default {
     /**
      * Getter allows to get current search images collection
      */
-    ...mapGetters(["getFavorites","getSearchCollection", ]),
+    ...mapGetters(["getFavorites", "getSearchCollection"]),
     favoritesLength() {
-      return this.getFavorites ? Object.keys(JSON.parse(this.getFavorites)).length >= 4 : 0
+      return this.getFavorites
+        ? Object.keys(JSON.parse(this.getFavorites)).length >= 4
+        : 0;
     },
     /**
      * Check if current page is photo page
@@ -154,27 +156,24 @@ export default {
       return this.$route.path === "/favorites";
     }
   },
+
+  watch: {
+    /**
+     * When route changes,
+     * our component will be rerendered
+     */
+    $route() {
+      this.startComponent();
+    }
+  },
   /**
    * Initialize scroll listener
    * Load images when the page is ready
    * Get's new images from event bus and replace
    * old images to the new one
    */
-  async mounted() {
-    if (this.$route.path === "/home") {
-      this.images = await this.getCollection();
-      // Delay scroll handle function
-      let delayedHandler = _.debounce(this.handleScroll, 400);
-      window.addEventListener("scroll", delayedHandler);
-      eventBus.$on("collection", collection => {
-        this.images = collection;
-      });
-      this.loaded = true;
-    } else if (this.$route.path === "/favorites") {
-      this.getFavoritesImages();
-    } else {
-      this.getSimilar();
-    }
+  mounted() {
+    this.startComponent();
   },
   methods: {
     /**
@@ -187,6 +186,27 @@ export default {
       "dowloadPhoto",
       "getSimilarImg"
     ]),
+    async startComponent() {
+      console.log(1)
+      if (this.$route.path === "/home") {
+        const collectionName = this.$route.params.collectionName;
+        this.images = await this.getCollection(collectionName);
+        // Delay scroll handle function
+        let delayedHandler = _.debounce(this.handleScroll, 400);
+        window.addEventListener("scroll", delayedHandler);
+        this.loaded = true;
+      } else if (this.$route.params.collectionName) {
+        const collectionName = this.$route.params.collectionName;
+        this.images = await this.getCollection(collectionName);
+        let delayedHandler = _.debounce(this.handleScroll, 400);
+        window.addEventListener("scroll", delayedHandler);
+        this.loaded = true;
+      } else if (this.$route.path === "/favorites") {
+        this.getFavoritesImages();
+      } else {
+        this.getSimilar();
+      }
+    },
     /**
      * Method allows to laod favorites images
      */

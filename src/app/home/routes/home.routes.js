@@ -9,5 +9,10 @@ export default [
     path: "/home",
     name: "Home",
     component: home
+  },
+  {
+    path: "/home/:collectionName",
+    name: "HomeCollection",
+    component: home
   }
 ];
