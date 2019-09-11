@@ -97,7 +97,7 @@
           </div>
         </div>
       </li>
-      <a
+      <!-- <a
         v-if="loaded && images && isOnHome || isOnPhoto || isOnFavorites && loaded"
         class="masonry-top"
         @click="scrollTop"
@@ -107,7 +107,7 @@
           alt="up"
           class="photos-button masonry-up"
         >
-      </a>
+      </a> -->
     </ul>
   </div>
 </template>
@@ -315,7 +315,7 @@ export default {
     }
   }
   &-item {
-    max-width: 456px;
+    max-width: 446px;
     width: 100%;
     &:hover {
       .masonry-image__data {

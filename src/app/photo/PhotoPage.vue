@@ -190,9 +190,8 @@ export default {
       position: relative;
     }
     &__image {
-      background-size: 100%;
+      background-size: cover;
       background-repeat: no-repeat;
-      // filter: blur(5px);
       @include desktop-large {
         background-image: none !important;
       }
@@ -268,7 +267,7 @@ export default {
       color: #fff;
       font-size: 30px;
       line-height: 36px;
-      @include wrapper {
+      @include desktop-large {
         color: #000;
       }
     }
@@ -277,7 +276,7 @@ export default {
       color: #fff;
       font-size: 18px;
       line-height: 1;
-      @include wrapper {
+      @include desktop-large {
         color: #828282;
       }
     }
@@ -294,7 +293,7 @@ export default {
       font-family: SF UI Display Semibold;
       font-size: 24px;
       line-height: 29px;
-      @include wrapper {
+      @include desktop-large {
         color: #000;
       }
     }
@@ -316,7 +315,7 @@ export default {
       margin-top: 20px;
       background: #fff;
       border-radius: 5px;
-      @include wrapper {
+      @include desktop-large {
         background: #f2f2f2;
         color: #828282;
       }
@@ -329,7 +328,7 @@ export default {
     font-family: SF UI Display Semibold;
     font-size: 36px;
     line-height: 43px;
-    @include tablets-small-up {
+    @include desktop-large {
       text-align: center;
     }
   }

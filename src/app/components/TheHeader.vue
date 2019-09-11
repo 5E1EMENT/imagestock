@@ -3,7 +3,7 @@
     id="header-wrapper"
     ref="headerWrapper"
     class="header-wrapper"
-    :class="{ 'header-favorites': onFavorites || onPhoto, 'active-padding': sticky && !onFavorites, 'active-padding__photo': sticky && onPhoto }"
+    :class="{ 'header-favorites': onFavorites, 'header-photo': onPhoto,'active-padding': sticky && !onFavorites && !onPhoto, 'active-padding__photo': sticky && onPhoto }"
   >
     <b-container
       ref="headerContainer"
@@ -82,6 +82,7 @@ export default {
         this.invertHistoryStatus(false);
       } else if (this.$route.path === "/home") {
         this.onFavorites = false;
+        this.onPhoto = false;
         this.sticky = false;
         this.invertSearchStatus(true);
         this.invertHistoryStatus(false);
@@ -180,6 +181,10 @@ export default {
   &-favorites {
     padding: 0;
     height: auto;
+  }
+  &-photo {
+    padding: 0;
+    height: 80px;
   }
 }
 .active-padding {
