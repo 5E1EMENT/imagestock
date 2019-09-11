@@ -16,7 +16,7 @@
       >
         <router-link
           tag="a"
-          to="/home"
+          to="/"
           class="navbar-link"
         >
           <div class="navbar-logo">

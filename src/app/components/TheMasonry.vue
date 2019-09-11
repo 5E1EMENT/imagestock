@@ -98,7 +98,7 @@
         </div>
       </li>
       <a
-        v-if="loaded && images && isOnHome || isOnPhoto || isOnFavorites && loaded"
+        v-if="loaded && images && isOnHome || isOnPhoto && loaded || isOnFavorites && favoritesLength"
         class="masonry-top"
         @click="scrollTop"
       >
@@ -128,7 +128,10 @@ export default {
     /**
      * Getter allows to get current search images collection
      */
-    ...mapGetters(["getSearchCollection"]),
+    ...mapGetters(["getFavorites","getSearchCollection", ]),
+    favoritesLength() {
+      return Object.keys(JSON.parse(this.getFavorites)).length >= 4
+    },
     /**
      * Check if current page is photo page
      */
@@ -155,6 +158,7 @@ export default {
    * old images to the new one
    */
   async mounted() {
+    console.log(Object.keys(JSON.parse(this.getFavorites)).length )
     if (this.$route.path === "/home") {
       this.images = await this.getCollection();
       // Delay scroll handle function
@@ -165,7 +169,7 @@ export default {
       });
       this.loaded = true;
     } else if (this.$route.path === "/favorites") {
-      this.getFavorites();
+      this.getFavoritesImages();
     } else {
       this.getSimilar();
     }
@@ -184,7 +188,7 @@ export default {
     /**
      * Method allows to laod favorites images
      */
-    async getFavorites() {
+    async getFavoritesImages() {
       const favoriteImages = await this.getFavoritesImg();
       this.images = _.uniqWith(favoriteImages, _.isEqual);
       this.$emit("loadedFavorites", false);
